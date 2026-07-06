@@ -16,7 +16,7 @@ except Exception:
     pass  # no secrets file when running locally — .env covers it
 
 import config
-from llm_client import RitsClient
+from llm_client import ClaudeClient
 from pipeline import STYLE_GUIDE, captions_from_description, describe_video
 
 EXAMPLE_CLIPS = {
@@ -34,8 +34,8 @@ STYLE_LABELS = {
 
 
 @st.cache_resource
-def get_client() -> RitsClient:
-    return RitsClient(config.VISION_API_KEY, config.VISION_API_ENDPOINT, config.VISION_MODEL_ID)
+def get_client() -> ClaudeClient:
+    return ClaudeClient(config.ANTHROPIC_API_KEY, config.CLAUDE_MODEL_ID)
 
 
 st.set_page_config(page_title="Video Captioning Agent", page_icon="🎬", layout="centered")

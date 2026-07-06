@@ -25,6 +25,13 @@ def get_duration_seconds(video_path: str) -> float:
     return float(out.stdout.strip())
 
 
+def choose_num_frames(duration_s: float, seconds_per_frame: float = 5.0,
+                      min_frames: int = 8, max_frames: int = 20) -> int:
+    """~1 frame per `seconds_per_frame` of video, clamped so short clips still get
+    enough temporal coverage and long clips don't blow up the request size."""
+    return max(min_frames, min(max_frames, round(duration_s / seconds_per_frame)))
+
+
 def extract_frames(video_path: str, out_dir: str, num_frames: int = 8, max_width: int = 512) -> list[str]:
     """Extract `num_frames` evenly spaced JPEG frames, downscaled to max_width, in order."""
     duration = max(get_duration_seconds(video_path), 1.0)
@@ -45,7 +52,7 @@ def extract_frames(video_path: str, out_dir: str, num_frames: int = 8, max_width
     )
 
 
-def frame_to_data_uri(frame_path: str) -> str:
+def frame_to_b64(frame_path: str) -> str:
+    """Raw base64 of a JPEG frame (the Claude API takes base64 + media_type, not data URIs)."""
     with open(frame_path, "rb") as f:
-        b64 = base64.b64encode(f.read()).decode("utf-8")
-    return f"data:image/jpeg;base64,{b64}"
+        return base64.b64encode(f.read()).decode("utf-8")

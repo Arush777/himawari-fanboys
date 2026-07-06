@@ -1,9 +1,8 @@
-"""LLM endpoint configuration for the video captioning pipeline.
+"""Configuration for the video captioning pipeline.
 
-Values are read from the environment first (via .env locally, or -e at `docker run` time),
-with the literals below only as a local-dev fallback. Track 2 requires pushing your image to
-a PUBLIC registry — never bake a real API key into config.py or a committed .env, since anyone
-who pulls the image or clones the repo could extract it.
+Values are read from the environment first (via .env locally, Streamlit Secrets on
+Streamlit Cloud, or -e at `docker run` time). Never commit a real API key: .env is
+gitignored, and the Docker image is pushed to a PUBLIC registry.
 """
 import os
 
@@ -11,14 +10,13 @@ from dotenv import load_dotenv
 
 load_dotenv()  # loads .env into os.environ if present; no-op if the file doesn't exist
 
-# Vision model — used to look at sampled video frames (Qwen2-VL-72B-Instruct on RITS).
-VISION_API_KEY = os.environ.get("RITS_VISION_API_KEY", "PASTE_YOUR_RITS_API_KEY_HERE")
-VISION_API_ENDPOINT = os.environ.get(
-    "RITS_VISION_API_ENDPOINT",
-    "https://inference-3scale-apicast-production.apps.rits.fmaas.res.ibm.com/qwen2-vl-72b-instruct",
-)
-VISION_MODEL_ID = os.environ.get("RITS_VISION_MODEL_ID", "Qwen/Qwen2-VL-72B-Instruct")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+CLAUDE_MODEL_ID = os.environ.get("CLAUDE_MODEL_ID", "claude-haiku-4-5")
 
-# Frame sampling.
-NUM_FRAMES = 10
-FRAME_MAX_WIDTH = 512
+# Frame sampling: ~1 frame per SECONDS_PER_FRAME of video, clamped to
+# [MIN_FRAMES, MAX_FRAMES]. Clips in the hidden set are 30s-2min, so this yields
+# 8 frames for a 30s clip up to 20 frames for a 100s+ clip.
+SECONDS_PER_FRAME = 5.0
+MIN_FRAMES = 8
+MAX_FRAMES = 20
+FRAME_MAX_WIDTH = 768

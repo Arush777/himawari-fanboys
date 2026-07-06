@@ -1,9 +1,9 @@
 # AMD Hackathon — Track 2: Video Captioning Agent
 
-Pipeline: download clip → sample frames with ffmpeg → describe frames with a RITS vision
-model (configured via `.env`, currently Qwen3-VL-235B) → rewrite the description into 4
-styles, returned as strict JSON in one call. Both steps (describing and style rewriting) go
-through the same vision model — no separate text model is used.
+Pipeline: download clip → sample frames with ffmpeg (~1 frame per 5s, 8–20 frames depending
+on clip length) → describe frames with Claude (vision) → rewrite the description into 4
+styles in one structured-outputs call (guaranteed-valid JSON). Model defaults to
+`claude-haiku-4-5` (fast + cheap, vision-capable); override via `CLAUDE_MODEL_ID`.
 
 Two ways to run the same pipeline:
 
@@ -18,7 +18,7 @@ Two ways to run the same pipeline:
 ├── app.py               Streamlit demo UI wrapping the same pipeline
 ├── packages.txt         system deps for Streamlit Cloud (ffmpeg)
 ├── pipeline.py           core video -> caption logic (describe frames, rewrite into styles)
-├── llm_client.py         thin OpenAI-compatible client wrapper for the RITS endpoint
+├── llm_client.py         Claude API client (vision description + structured-output JSON)
 ├── video_utils.py        ffmpeg/ffprobe helpers: download, extract frames, base64-encode
 ├── config.py             loads .env and exposes API key/endpoint/model/frame settings
 ├── describe_videos.py    local-only helper: dumps a long detailed description per clip
@@ -45,16 +45,16 @@ Two ways to run the same pipeline:
   `caption_video` takes that description and asks the same model to rewrite it into the 4
   requested styles (`formal`, `sarcastic`, `humorous_tech`, `humorous_non_tech`) as one JSON
   object in a single call.
-- **`llm_client.py`** — `RitsClient`, a small wrapper around the `openai` SDK pointed at a RITS
-  endpoint. Handles retries, strips `<think>...</think>` preambles some models emit, and
-  exposes `describe_frames` (vision + text) and `generate_text` (text only).
+- **`llm_client.py`** — `ClaudeClient`, a small wrapper around the official `anthropic` SDK.
+  Exposes `describe_frames` (frames as base64 image blocks + prompt) and `generate_json`
+  (structured outputs — the styled captions come back as guaranteed-valid JSON).
 - **`video_utils.py`** — `download_video` (streams a URL to disk), `extract_frames` (evenly
   spaced JPEGs via ffmpeg, downscaled), and `frame_to_data_uri` (base64 data URI for the
   vision API).
 - **`config.py`** — Calls `load_dotenv()` so values in `.env` are picked up automatically,
-  then reads `RITS_VISION_API_KEY`, `RITS_VISION_API_ENDPOINT`, `RITS_VISION_MODEL_ID` from
-  the environment (with code literals as fallback), plus `NUM_FRAMES` and `FRAME_MAX_WIDTH`
-  for frame sampling.
+  then reads `ANTHROPIC_API_KEY` and `CLAUDE_MODEL_ID` from the environment, plus the
+  frame-sampling constants (`SECONDS_PER_FRAME`, `MIN_FRAMES`, `MAX_FRAMES`,
+  `FRAME_MAX_WIDTH`).
 - **`describe_videos.py`** — A standalone dev script (not used by `main.py` or the Docker
   image) that runs each task's video through a much longer, more detailed description prompt
   and saves the results to `descriptions.json`. Useful for inspecting what the model actually
@@ -65,24 +65,23 @@ Two ways to run the same pipeline:
 
 ## Changing the model
 
-Since the key, endpoint, and model ID are all read from the environment, you can point the
-pipeline at a different RITS model without touching any code — just edit `.env`:
+The key and model ID are read from the environment, so you can switch Claude models
+without touching code — just edit `.env`:
 
 ```
-RITS_VISION_API_KEY=...
-RITS_VISION_API_ENDPOINT=https://.../some-other-model
-RITS_VISION_MODEL_ID=Some/Other-Model-Id
+ANTHROPIC_API_KEY=sk-ant-...
+CLAUDE_MODEL_ID=claude-haiku-4-5   # or claude-sonnet-5 for higher caption quality
 ```
 
 Then rerun `python3 main.py` (see below).
 
 ## Before you build
 
-Copy `.env.example` to `.env` and fill in your real RITS API key:
+Copy `.env.example` to `.env` and paste your real Claude API key:
 
 ```bash
 cp .env.example .env
-# edit .env and set RITS_VISION_API_KEY (and optionally the endpoint/model)
+# edit .env and set ANTHROPIC_API_KEY (and optionally CLAUDE_MODEL_ID)
 ```
 
 ## Local test (no Docker)
@@ -114,7 +113,7 @@ python3 describe_videos.py
 docker buildx build --platform linux/amd64 --tag video-captioner:latest --load .
 
 docker run --rm \
-  -e RITS_VISION_API_KEY=... \
+  -e ANTHROPIC_API_KEY=sk-ant-... \
   -v "$(pwd)/sample_input:/input:ro" \
   -v "$(pwd)/sample_output:/output" \
   video-captioner:latest
@@ -141,26 +140,24 @@ On Streamlit Community Cloud (free, no server needed):
 
 1. Go to https://share.streamlit.io, sign in with GitHub, click **Create app**.
 2. Pick this repo, branch `main`, main file `app.py`.
-3. In the app's **Settings → Secrets**, paste the same three variables as `.env`:
+3. In the app's **Settings → Secrets**, paste the same variables as `.env`:
 
    ```toml
-   RITS_VISION_API_KEY = "..."
-   RITS_VISION_API_ENDPOINT = "https://.../qwen3-vl-235b-a22b-thinking"
-   RITS_VISION_MODEL_ID = "Qwen/Qwen3-VL-235B-A22B-Thinking"
+   ANTHROPIC_API_KEY = "sk-ant-..."
+   # optional: CLAUDE_MODEL_ID = "claude-haiku-4-5"
    ```
 
 `packages.txt` makes Streamlit Cloud install ffmpeg; `app.py` copies the secrets into the
-environment so `config.py` works unchanged. Note: the RITS endpoint must be reachable from
-Streamlit's servers (public internet) for the hosted demo to work.
+environment so `config.py` works unchanged.
 
 ## Notes / tradeoffs
 
-- 10 evenly-spaced frames per clip are sent to the vision model, downscaled to 512px wide.
-  The RITS vision endpoint hard-rejects requests with more than 10 images, so 10 is the max
-  this pipeline can use without erroring.
-- One vision call to describe the frames + one more call (same model) to rewrite into the 4
-  styles — not 4 separate calls — keeping this comfortably within the 10 minute container
-  limit even for ~12 hidden clips.
-- Do NOT commit `.env` or bake your real RITS API key into the image before pushing it to a
-  public registry — `.env` is gitignored, and for Docker pass the key via `-e` at
+- Frame count adapts to clip length: ~1 frame per 5 seconds, clamped to 8–20, downscaled
+  to 768px wide. At 768px a 16:9 frame costs ~440 tokens, so even a 20-frame clip is
+  ~9K input tokens — trivially within Haiku's 200K context and roughly $0.01/clip.
+- One vision call to describe the frames + one structured-outputs call to rewrite into the
+  4 styles — not 4 separate calls — and clips run 4-at-a-time, keeping this comfortably
+  within the 10 minute container limit even for ~12 hidden clips.
+- Do NOT commit `.env` or bake your real Claude API key into the image before pushing it to
+  a public registry — `.env` is gitignored, and for Docker pass the key via `-e` at
   `docker run` time instead.

@@ -17,4 +17,4 @@ python3 describe_videos.py                                          # run the sa
 cat sample_output/descriptions.json                                 # print the detailed descriptions
 ```
 
-To change the model, edit `RITS_VISION_API_ENDPOINT` / `RITS_VISION_MODEL_ID` in `.env`, then rerun.
+To change the model, edit `CLAUDE_MODEL_ID` in `.env` (defaults to `claude-haiku-4-5`), then rerun.

@@ -6,7 +6,7 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor
 
 import config
-from llm_client import RitsClient
+from llm_client import ClaudeClient
 from pipeline import caption_video
 
 INPUT_PATH = os.environ.get("INPUT_PATH", "/input/tasks.json")
@@ -18,14 +18,13 @@ def main() -> int:
     with open(INPUT_PATH, "r") as f:
         tasks = json.load(f)
 
-    vision_client = RitsClient(config.VISION_API_KEY, config.VISION_API_ENDPOINT, config.VISION_MODEL_ID)
-    text_client = vision_client
+    client = ClaudeClient(config.ANTHROPIC_API_KEY, config.CLAUDE_MODEL_ID)
 
     def run_task(task: dict) -> dict:
         task_id = task["task_id"]
         styles = task["styles"]
         try:
-            captions = caption_video(task["video_url"], styles, vision_client, text_client)
+            captions = caption_video(task["video_url"], styles, client)
         except Exception:
             print(f"[{task_id}] FAILED: {traceback.format_exc()}", file=sys.stderr)
             captions = {s: "" for s in styles}
