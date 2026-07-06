@@ -33,9 +33,22 @@ STYLE_LABELS = {
 }
 
 
+def _get_api_key() -> str:
+    """Read the key fresh on every rerun — Streamlit secrets can be added after boot,
+    and config.py's value is frozen at first import."""
+    key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not key:
+        try:
+            key = st.secrets.get("ANTHROPIC_API_KEY", "")
+        except Exception:
+            pass
+    return key
+
+
 @st.cache_resource
-def get_client() -> ClaudeClient:
-    return ClaudeClient(config.ANTHROPIC_API_KEY, config.CLAUDE_MODEL_ID)
+def get_client(api_key: str) -> ClaudeClient:
+    model = os.environ.get("CLAUDE_MODEL_ID", "") or config.CLAUDE_MODEL_ID
+    return ClaudeClient(api_key, model)
 
 
 st.set_page_config(page_title="Video Captioning Agent", page_icon="🎬", layout="centered")
@@ -63,7 +76,15 @@ if video_url:
     st.video(video_url)
 
 if st.button("Generate captions", type="primary", disabled=not (video_url and styles)):
-    client = get_client()
+    api_key = _get_api_key()
+    if not api_key:
+        st.error(
+            "ANTHROPIC_API_KEY is not set. Add it in the app's **Settings → Secrets** as\n\n"
+            '`ANTHROPIC_API_KEY = "sk-ant-..."`\n\n'
+            "then reboot the app (Manage app → ⋮ → Reboot)."
+        )
+        st.stop()
+    client = get_client(api_key)
     try:
         with st.spinner("Watching the video (downloading + sampling frames + vision model)..."):
             description = describe_video(video_url, client)
