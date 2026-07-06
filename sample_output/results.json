@@ -2,28 +2,28 @@
   {
     "task_id": "v1",
     "captions": {
-      "formal": "The video captures a busy urban intersection with multi-lane traffic flow, including cars, buses, and trucks exhibiting motion blur at varying speeds, alongside changing traffic signals and pedestrian lights, set against tall residential buildings, golden autumn foliage, distant hills, and clear late-afternoon skies.",
-      "sarcastic": "Nothing says 'peaceful autumn evening' like watching humanity's finest engineers navigate a symphony of honking metal boxes at rush hour.",
-      "humorous_tech": "The traffic light's 'optimization algorithm' clearly prioritizes chaos over throughput\u2014cars are stuck in a race condition while leaves implement a smooth O(n log n) fall pattern.",
-      "humorous_non_tech": "Cars zoom by like they're late for a very important appointment (probably to buy pumpkin spice lattes), while the trees just stand there judging everyone's driving."
+      "formal": "An elevated stationary camera captures daytime traffic flow along a multi-lane urban expressway lined with golden autumn ginkgo trees, with numerous vehicles in motion across the roadway and residential and commercial buildings visible in the background.",
+      "sarcastic": "Nothing quite says urban planning success like a picturesque tree-lined highway where traffic moves at a leisurely pace and everyone gets to enjoy the scenic autumn foliage from inside their cars.",
+      "humorous_tech": "The expressway's traffic pattern suggests a classic merge-conflict scenario where thousands of autonomous agents attempt to optimize their routes simultaneously, resulting in the kind of motion blur usually seen when your browser has seventeen tabs open and you're still opening more.",
+      "humorous_non_tech": "Proof that whoever planted those golden ginkgo trees decades ago made better life decisions than the drivers now stuck admiring them from their vehicles during rush hour."
     }
   },
   {
     "task_id": "v2",
     "captions": {
-      "formal": "",
-      "sarcastic": "",
-      "humorous_tech": "",
-      "humorous_non_tech": ""
+      "formal": "An orange and white tabby kitten walks along a garden path lined with dense vegetation and dappled sunlight, moving steadily toward the camera with alert posture and direct eye contact.",
+      "sarcastic": "A tiny kitten bravely navigates a mildly overgrown garden path, demonstrating the sort of laser-focused determination usually reserved for actual emergencies.",
+      "humorous_tech": "A young tabby kitten implements a direct path-traversal algorithm through a lush garden tunnel, successfully executing its approach vector while maintaining constant eye contact with the destination\u2014clearly a well-optimized process with zero bugs.",
+      "humorous_non_tech": "A determined little orange tabby marches directly toward the camera as if it has just remembered you promised it treats, moving with the unwavering focus of a creature absolutely certain you owe it something."
     }
   },
   {
     "task_id": "v3",
     "captions": {
-      "formal": "",
-      "sarcastic": "",
-      "humorous_tech": "",
-      "humorous_non_tech": ""
+      "formal": "A professional woman performs computer-based office work at her desk in a contemporary corporate environment, seated at a white workstation equipped with a monitor, mouse, and accessories, while maintaining focused posture throughout the sequence.",
+      "sarcastic": "A woman demonstrates remarkable dedication to the art of remaining completely still at her desk while the camera circles her like a shark, truly a breathtaking exploration of office furniture ergonomics.",
+      "humorous_tech": "After pushing her code to production at 4:59 PM, she enters an infinite loop of refreshing her monitoring dashboard, trying to convince herself that the deploy will stabilize if she just sits still and doesn't make eye contact with the error logs.",
+      "humorous_non_tech": "She sits at her desk with the kind of focus people reserve for waiting at the DMV, occasionally adjusting her posture as if a tiny shift in chair angle might somehow make the afternoon go faster."
     }
   }
 ]
