@@ -1,0 +1,29 @@
+[
+  {
+    "task_id": "v1",
+    "captions": {
+      "formal": "The video captures a busy urban intersection with multi-lane traffic flow, including cars, buses, and trucks exhibiting motion blur at varying speeds, alongside changing traffic signals and pedestrian lights, set against tall residential buildings, golden autumn foliage, distant hills, and clear late-afternoon skies.",
+      "sarcastic": "Nothing says 'peaceful autumn evening' like watching humanity's finest engineers navigate a symphony of honking metal boxes at rush hour.",
+      "humorous_tech": "The traffic light's 'optimization algorithm' clearly prioritizes chaos over throughput\u2014cars are stuck in a race condition while leaves implement a smooth O(n log n) fall pattern.",
+      "humorous_non_tech": "Cars zoom by like they're late for a very important appointment (probably to buy pumpkin spice lattes), while the trees just stand there judging everyone's driving."
+    }
+  },
+  {
+    "task_id": "v2",
+    "captions": {
+      "formal": "",
+      "sarcastic": "",
+      "humorous_tech": "",
+      "humorous_non_tech": ""
+    }
+  },
+  {
+    "task_id": "v3",
+    "captions": {
+      "formal": "",
+      "sarcastic": "",
+      "humorous_tech": "",
+      "humorous_non_tech": ""
+    }
+  }
+]

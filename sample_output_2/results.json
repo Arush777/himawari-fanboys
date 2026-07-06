@@ -1,0 +1,29 @@
+[
+  {
+    "task_id": "v1",
+    "captions": {
+      "formal": "",
+      "sarcastic": "",
+      "humorous_tech": "",
+      "humorous_non_tech": ""
+    }
+  },
+  {
+    "task_id": "v2",
+    "captions": {
+      "formal": "",
+      "sarcastic": "",
+      "humorous_tech": "",
+      "humorous_non_tech": ""
+    }
+  },
+  {
+    "task_id": "v3",
+    "captions": {
+      "formal": "",
+      "sarcastic": "",
+      "humorous_tech": "",
+      "humorous_non_tech": ""
+    }
+  }
+]
