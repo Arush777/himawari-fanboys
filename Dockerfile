@@ -9,4 +9,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY config.py video_utils.py llm_client.py pipeline.py main.py ./
 
+# Track 2 rules: no env vars are injected by the harness — credentials ship inside
+# the image. The key is supplied at build time (--build-arg), never committed to git.
+ARG ANTHROPIC_API_KEY=""
+ENV ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+
 CMD ["python", "main.py"]
