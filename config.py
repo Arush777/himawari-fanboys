@@ -17,11 +17,12 @@ FIREWORKS_BASE_URL = "https://api.fireworks.ai/inference/v1"
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 # Primary submission model. CLAUDE_MODEL_ID is the explicit generator setting; the
-# default is the currently submitted Opus variant.
+# default is Sonnet: the Opus trial scored 0.80 on the hidden leaderboard vs
+# Sonnet's 0.83, so Sonnet is the reverted-to champion.
 CLAUDE_MODEL_ID = (
     os.environ.get("CLAUDE_MODEL_ID")
     or os.environ.get("ANTHROPIC_MODEL_ID")
-    or "claude-opus-4-8"
+    or "claude-sonnet-5"
 )
 
 # judge.py is a standalone dev tool (not part of the graded pipeline) that scores
