@@ -6,7 +6,7 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor
 
 import config
-from llm_client import ClaudeClient
+from llm_client import FireworksClient
 from pipeline import caption_video
 
 INPUT_PATH = os.environ.get("INPUT_PATH", "/input/tasks.json")
@@ -18,7 +18,7 @@ def main() -> int:
     with open(INPUT_PATH, "r") as f:
         tasks = json.load(f)
 
-    client = ClaudeClient(config.ANTHROPIC_API_KEY, config.CLAUDE_MODEL_ID)
+    client = FireworksClient(config.FIREWORKS_API_KEY, config.FIREWORKS_MODEL_ID, config.FIREWORKS_BASE_URL)
 
     def run_task(task: dict) -> dict:
         task_id = task["task_id"]

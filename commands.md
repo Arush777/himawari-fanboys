@@ -17,4 +17,14 @@ python3 describe_videos.py                                          # run the sa
 cat sample_output/descriptions.json                                 # print the detailed descriptions
 ```
 
-To change the model, edit `CLAUDE_MODEL_ID` in `.env` (defaults to `claude-haiku-4-5`), then rerun.
+## Optional: LLM-as-judge scoring of a results.json (not part of grading)
+
+```bash
+export RESULTS_PATH="$(pwd)/sample_output/results.json"             # captions to grade (from main.py)
+export JUDGE_OUTPUT_PATH="$(pwd)/sample_output/judged_results.json" # where to write scores
+python3 judge.py                                                    # score every caption for accuracy + tone_fit
+cat sample_output/judged_results.json
+```
+
+To change the model, edit `FIREWORKS_MODEL_ID` in `.env` (defaults to
+`accounts/fireworks/models/kimi-k2p6`), then rerun.

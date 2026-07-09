@@ -3,7 +3,7 @@ import os
 import tempfile
 
 import config
-from llm_client import ClaudeClient
+from llm_client import FireworksClient
 from video_utils import (
     choose_num_frames,
     download_video,
@@ -59,7 +59,8 @@ def _style_prompt(description: str, styles: list[str]) -> str:
         "- including the funny ones - must clearly reference the real subject, setting, and "
         "action of the clip, and must stand alone without the other captions. Write in "
         "English. Do not mention frames, images, descriptions, or that this is a video "
-        "analysis."
+        "analysis. Respond with only a single JSON object matching the requested schema, no "
+        "other text."
     )
 
 
@@ -72,7 +73,7 @@ def _caption_schema(styles: list[str]) -> dict:
     }
 
 
-def _describe_video(video_url: str, client: ClaudeClient) -> str:
+def _describe_video(video_url: str, client: FireworksClient) -> str:
     with tempfile.TemporaryDirectory() as tmp_dir:
         video_path = os.path.join(tmp_dir, "clip.mp4")
         download_video(video_url, video_path)
@@ -93,13 +94,13 @@ def _describe_video(video_url: str, client: ClaudeClient) -> str:
         return client.describe_frames(frames_b64, DESCRIBE_PROMPT.format(n=len(frames_b64)))
 
 
-def describe_video(video_url: str, client: ClaudeClient) -> str:
+def describe_video(video_url: str, client: FireworksClient) -> str:
     """Return just the factual scene description (no style rewriting)."""
     return _describe_video(video_url, client)
 
 
 def captions_from_description(description: str, styles: list[str],
-                              client: ClaudeClient) -> dict:
+                              client: FireworksClient) -> dict:
     """Rewrite a factual description into one caption per requested style.
 
     Uses structured outputs, so the response is guaranteed to be valid JSON with
@@ -117,6 +118,6 @@ def captions_from_description(description: str, styles: list[str],
     return result
 
 
-def caption_video(video_url: str, styles: list[str], client: ClaudeClient) -> dict:
+def caption_video(video_url: str, styles: list[str], client: FireworksClient) -> dict:
     description = _describe_video(video_url, client)
     return captions_from_description(description, styles, client)

@@ -7,7 +7,7 @@ import sys
 import tempfile
 
 import config
-from llm_client import ClaudeClient
+from llm_client import FireworksClient
 from video_utils import (
     choose_num_frames,
     download_video,
@@ -29,7 +29,7 @@ DETAILED_DESCRIBE_PROMPT = (
 )
 
 
-def describe_video_detailed(video_url: str, client: ClaudeClient) -> str:
+def describe_video_detailed(video_url: str, client: FireworksClient) -> str:
     with tempfile.TemporaryDirectory() as tmp_dir:
         video_path = os.path.join(tmp_dir, "clip.mp4")
         download_video(video_url, video_path)
@@ -57,7 +57,7 @@ def main() -> int:
     with open(INPUT_PATH, "r") as f:
         tasks = json.load(f)
 
-    client = ClaudeClient(config.ANTHROPIC_API_KEY, config.CLAUDE_MODEL_ID)
+    client = FireworksClient(config.FIREWORKS_API_KEY, config.FIREWORKS_MODEL_ID, config.FIREWORKS_BASE_URL)
 
     results = []
     for task in tasks:

@@ -10,8 +10,13 @@ from dotenv import load_dotenv
 
 load_dotenv()  # loads .env into os.environ if present; no-op if the file doesn't exist
 
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-CLAUDE_MODEL_ID = os.environ.get("CLAUDE_MODEL_ID", "claude-haiku-4-5")
+FIREWORKS_API_KEY = os.environ.get("FIREWORKS_API_KEY", "")
+FIREWORKS_MODEL_ID = os.environ.get("FIREWORKS_MODEL_ID", "accounts/fireworks/models/kimi-k2p6")
+FIREWORKS_BASE_URL = "https://api.fireworks.ai/inference/v1"
+
+# Separate (optionally different, e.g. a stronger model) model used by judge.py to score
+# generated captions. Defaults to the same model used for generation.
+JUDGE_MODEL_ID = os.environ.get("JUDGE_MODEL_ID", FIREWORKS_MODEL_ID)
 
 # Frame sampling: ~1 frame per SECONDS_PER_FRAME of video, clamped to
 # [MIN_FRAMES, MAX_FRAMES]. Clips in the hidden set are 30s-2min, so this yields

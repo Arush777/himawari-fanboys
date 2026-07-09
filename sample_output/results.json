@@ -2,28 +2,28 @@
   {
     "task_id": "v1",
     "captions": {
-      "formal": "An elevated stationary camera captures daytime traffic flow along a multi-lane urban expressway lined with golden autumn ginkgo trees, with numerous vehicles in motion across the roadway and residential and commercial buildings visible in the background.",
-      "sarcastic": "Nothing quite says urban planning success like a picturesque tree-lined highway where traffic moves at a leisurely pace and everyone gets to enjoy the scenic autumn foliage from inside their cars.",
-      "humorous_tech": "The expressway's traffic pattern suggests a classic merge-conflict scenario where thousands of autonomous agents attempt to optimize their routes simultaneously, resulting in the kind of motion blur usually seen when your browser has seventeen tabs open and you're still opening more.",
-      "humorous_non_tech": "Proof that whoever planted those golden ginkgo trees decades ago made better life decisions than the drivers now stuck admiring them from their vehicles during rush hour."
+      "formal": "A long-exposure, elevated static shot captures heavy vehicular traffic flowing in both directions on a multi-lane urban street in South Korea, with autumn ginkgo trees, residential towers, and commercial buildings visible during late afternoon.",
+      "sarcastic": "South Korea really knows how to make sitting in traffic look almost as beautiful as actually getting somewhere.",
+      "humorous_tech": "The right lanes are running on a 1998 dial-up connection while the left lanes somehow got fiber optic. Classic bandwidth inequality.",
+      "humorous_non_tech": "Every lane thinks it's the smart choice until you're already stuck between a bus and a life decision you made three exits ago."
     }
   },
   {
     "task_id": "v2",
     "captions": {
-      "formal": "An orange and white tabby kitten walks along a garden path lined with dense vegetation and dappled sunlight, moving steadily toward the camera with alert posture and direct eye contact.",
-      "sarcastic": "A tiny kitten bravely navigates a mildly overgrown garden path, demonstrating the sort of laser-focused determination usually reserved for actual emergencies.",
-      "humorous_tech": "A young tabby kitten implements a direct path-traversal algorithm through a lush garden tunnel, successfully executing its approach vector while maintaining constant eye contact with the destination\u2014clearly a well-optimized process with zero bugs.",
-      "humorous_non_tech": "A determined little orange tabby marches directly toward the camera as if it has just remembered you promised it treats, moving with the unwavering focus of a creature absolutely certain you owe it something."
+      "formal": "A small orange kitten walks slowly through a wooded area toward a low-angle camera, maintaining direct eye contact as it moves through dappled sunlight and undergrowth.",
+      "sarcastic": "A tiny orange predator executes a devastatingly slow ambush through three feet of forest undergrowth.",
+      "humorous_tech": "Kitten.exe has stopped buffering and is now approaching the camera at 0.01 Mbps with tail uptime at 100%.",
+      "humorous_non_tech": "This kitten is walking toward you like someone who just remembered they left the stove on but also really wants a hug."
     }
   },
   {
     "task_id": "v3",
     "captions": {
-      "formal": "A professional woman performs computer-based office work at her desk in a contemporary corporate environment, seated at a white workstation equipped with a monitor, mouse, and accessories, while maintaining focused posture throughout the sequence.",
-      "sarcastic": "A woman demonstrates remarkable dedication to the art of remaining completely still at her desk while the camera circles her like a shark, truly a breathtaking exploration of office furniture ergonomics.",
-      "humorous_tech": "After pushing her code to production at 4:59 PM, she enters an infinite loop of refreshing her monitoring dashboard, trying to convince herself that the deploy will stabilize if she just sits still and doesn't make eye contact with the error logs.",
-      "humorous_non_tech": "She sits at her desk with the kind of focus people reserve for waiting at the DMV, occasionally adjusting her posture as if a tiny shift in chair angle might somehow make the afternoon go faster."
+      "formal": "A woman with her hair in a large bun, wearing a light-colored jacket over an orange top, types on a keyboard at a white desk in a modern office with circular overhead lighting and glass partitions.",
+      "sarcastic": "Truly inspiring to watch someone achieve the impossible feat of sitting still and pressing buttons for an entire afternoon.",
+      "humorous_tech": "She's been waiting for her code to compile for three hours now, but the loading bar is just another employee walking past her glass partition.",
+      "humorous_non_tech": "She's been staring at that screen so long she's started to wonder if the potted plant behind her is silently judging her life choices."
     }
   }
 ]

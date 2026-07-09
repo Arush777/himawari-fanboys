@@ -53,6 +53,6 @@ def extract_frames(video_path: str, out_dir: str, num_frames: int = 8, max_width
 
 
 def frame_to_b64(frame_path: str) -> str:
-    """Raw base64 of a JPEG frame (the Claude API takes base64 + media_type, not data URIs)."""
+    """Raw base64 of a JPEG frame (llm_client.py wraps this into a data: URI for the API)."""
     with open(frame_path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
