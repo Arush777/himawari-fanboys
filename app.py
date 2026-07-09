@@ -16,7 +16,7 @@ except Exception:
     pass  # no secrets file when running locally — .env covers it
 
 import config
-from llm_client import FireworksClient
+from llm_client import ClaudeClient
 from pipeline import STYLE_GUIDE, captions_from_description, describe_video
 
 EXAMPLE_CLIPS = {
@@ -36,19 +36,23 @@ STYLE_LABELS = {
 def _get_api_key() -> str:
     """Read the key fresh on every rerun — Streamlit secrets can be added after boot,
     and config.py's value is frozen at first import."""
-    key = os.environ.get("FIREWORKS_API_KEY", "")
+    key = os.environ.get("ANTHROPIC_API_KEY", "")
     if not key:
         try:
-            key = st.secrets.get("FIREWORKS_API_KEY", "")
+            key = st.secrets.get("ANTHROPIC_API_KEY", "")
         except Exception:
             pass
     return key
 
 
 @st.cache_resource
-def get_client(api_key: str) -> FireworksClient:
-    model = os.environ.get("FIREWORKS_MODEL_ID", "") or config.FIREWORKS_MODEL_ID
-    return FireworksClient(api_key, model, config.FIREWORKS_BASE_URL)
+def get_client(api_key: str) -> ClaudeClient:
+    model = (
+        os.environ.get("CLAUDE_MODEL_ID", "")
+        or os.environ.get("ANTHROPIC_MODEL_ID", "")
+        or config.CLAUDE_MODEL_ID
+    )
+    return ClaudeClient(api_key, model)
 
 
 st.set_page_config(page_title="Video Captioning Agent", page_icon="🎬", layout="centered")
@@ -79,8 +83,8 @@ if st.button("Generate captions", type="primary", disabled=not (video_url and st
     api_key = _get_api_key()
     if not api_key:
         st.error(
-            "FIREWORKS_API_KEY is not set. Add it in the app's **Settings → Secrets** as\n\n"
-            '`FIREWORKS_API_KEY = "fw_..."`\n\n'
+            "ANTHROPIC_API_KEY is not set. Add it in the app's **Settings → Secrets** as\n\n"
+            '`ANTHROPIC_API_KEY = "sk-ant-..."`\n\n'
             "then reboot the app (Manage app → ⋮ → Reboot)."
         )
         st.stop()

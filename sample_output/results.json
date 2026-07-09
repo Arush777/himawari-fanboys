@@ -2,28 +2,28 @@
   {
     "task_id": "v1",
     "captions": {
-      "formal": "This time-lapse footage presents a high-angle view of a multi-lane urban intersection with heavy vehicle traffic, framed by tall residential buildings and yellow ginkgo trees under clear daylight conditions.",
-      "sarcastic": "It is truly inspiring to watch thousands of commuters rush past the Korea Tectes Engineering building with such urgent, blurred efficiency.",
-      "humorous_tech": "The traffic flow looks like a successful deployment where every car merged without a single conflict, though the motion blur suggests the render time was set to maximum speed.",
-      "humorous_non_tech": "The yellow ginkgo trees are trying their best to provide a scenic autumn backdrop, but the cars are moving so fast they barely notice the pretty leaves."
+      "formal": "This time-lapse video shows continuous traffic flow along a multi-lane, tree-lined urban roadway with yellow autumn foliage, captured from an elevated viewpoint with a city skyline and distant mountains in the background under a bright, hazy daytime sky.",
+      "sarcastic": "Wow, cars driving on a road lined with pretty yellow trees while a skyline just sits there looking scenic in the background, truly the pinnacle of edge-of-your-seat entertainment.",
+      "humorous_tech": "Traffic streams through the intersection like packets through a congested router, blurring past yellow-leaved trees while the skyline hums quietly in the background, no buffering required.",
+      "humorous_non_tech": "Everyone's rushing somewhere under those golden autumn trees, probably late for dinner or desperately trying to beat the next red light before the sun changes its mind about staying warm."
     }
   },
   {
     "task_id": "v2",
     "captions": {
-      "formal": "A small ginger kitten walks forward from a shaded area of dirt and green foliage toward a low-angle camera lens during the daytime.",
-      "sarcastic": "The ginger kitten demonstrates breathtaking bravery by walking three feet across some dirt while maintaining intense eye contact.",
-      "humorous_tech": "The ginger kitten initiates a physical proximity scan, walking steadily toward the lens to debug the connection with its large, unblinking eyes.",
-      "humorous_non_tech": "This ginger kitten has spotted you and is walking over to demand the tribute of treats it believes you are hiding in your pockets."
+      "formal": "A small orange and white kitten walks steadily toward the camera across a dirt-covered, leaf-strewn forest floor, with dappled sunlight and hanging vines visible in the softly blurred background.",
+      "sarcastic": "Oh sure, just a tiny kitten casually strutting through the woods like it's the star of its own nature documentary, one deliberate paw-step at a time.",
+      "humorous_tech": "Kitten.exe is running a flawless forward-motion loop, front paw extended in every frame like it's rendering itself walking toward the camera in real time, no lag detected despite the leafy background blur.",
+      "humorous_non_tech": "Someone forgot to tell this fluffy orange and white kitten that the woods are supposed to be scary, because it's strutting through twigs and dappled sunlight like it owns the whole forest."
     }
   },
   {
     "task_id": "v3",
     "captions": {
-      "formal": "A Black woman wearing an orange top and light-colored jacket types on a keyboard at a white desk in a modern office setting.",
-      "sarcastic": "She demonstrates the thrilling ability to look at a screen and press keys without falling out of her black office chair.",
-      "humorous_tech": "Her fingers are flying across the keyboard, likely trying to push a hotfix to production before the silver all-in-one computer decides to update itself.",
-      "humorous_non_tech": "She is typing with the intense focus of someone who just remembered they left the oven on, or perhaps just trying to finish before lunch."
+      "formal": "A woman with a curly bun hairstyle, wearing a beige jacket over an orange top, is shown typing at a keyboard in front of a large monitor in a modern glass-partitioned office as the camera slowly moves closer from the side.",
+      "sarcastic": "Wow, a woman typing at a desk with a corded mouse next to a plant\u2014truly the most riveting office footage since the invention of the swivel chair.",
+      "humorous_tech": "She's typing with the intense focus of someone debugging production at 4:59pm on a Friday, while that poor corded mouse just lies there unemployed since she's clearly a keyboard-only warrior.",
+      "humorous_non_tech": "That's the universal face of someone typing an email they've rewritten four times, rocking a killer curly bun that's doing more work than some of her coworkers."
     }
   }
 ]

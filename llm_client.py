@@ -1,4 +1,4 @@
-"""Fireworks API client for the captioning pipeline (vision description + styled-caption JSON).
+"""LLM clients for the captioning pipeline (vision description + styled-caption JSON).
 
 Fireworks exposes an OpenAI-compatible Chat Completions endpoint, so this wraps the
 official `openai` SDK pointed at Fireworks' base URL. The vision models available on
@@ -10,6 +10,7 @@ the direct answer with no chain-of-thought preamble to strip.
 """
 import json
 
+import anthropic
 from openai import OpenAI
 
 
@@ -64,24 +65,38 @@ class FireworksClient:
         return json.loads(_content_of(response))
 
 
-class ClaudeJudgeClient:
-    """Claude backend for judge.py only — never used by the graded pipeline.
+def _text_of(response) -> str:
+    return "".join(block.text for block in response.content if block.type == "text").strip()
 
-    Scoring the Fireworks-generated captions with a model from a different family
-    avoids self-preference bias (a model tends to rate its own outputs generously).
-    Implements the same `generate_json(prompt, schema, frames_b64=None)` interface as
-    FireworksClient so judge.py can use either interchangeably. `anthropic` is imported
-    lazily so it stays out of requirements.txt / the Docker image — install it with
-    `pip install anthropic` only if you use this judge backend.
-    """
+
+class ClaudeClient:
+    """Claude/Sonnet backend for the graded captioning pipeline."""
 
     def __init__(self, api_key: str, model_id: str, timeout: float = 120.0):
-        import anthropic
         self.model_id = model_id
         self.client = anthropic.Anthropic(api_key=api_key, timeout=timeout, max_retries=3)
 
+    def describe_frames(self, frames_b64: list[str], prompt: str, max_tokens: int = 1024) -> str:
+        """Send JPEG frames (raw base64, chronological order) plus a prompt; return text."""
+        content = [
+            {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": b64}}
+            for b64 in frames_b64
+        ]
+        content.append({"type": "text", "text": prompt})
+        response = self.client.messages.create(
+            model=self.model_id,
+            max_tokens=max_tokens,
+            messages=[{"role": "user", "content": content}],
+        )
+        return _text_of(response)
+
     def generate_json(self, prompt: str, schema: dict, frames_b64: list[str] | None = None,
-                       max_tokens: int = 2048) -> dict:
+                      max_tokens: int = 1024) -> dict:
+        """Generate a JSON object matching `schema`.
+
+        If `frames_b64` is given, frames are included in the same request. The graded
+        pipeline uses text-only JSON rewriting; judge.py uses the frame-aware path.
+        """
         content = [
             {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": b64}}
             for b64 in (frames_b64 or [])
@@ -93,5 +108,14 @@ class ClaudeJudgeClient:
             output_config={"format": {"type": "json_schema", "schema": schema}},
             messages=[{"role": "user", "content": content}],
         )
-        text = "".join(block.text for block in response.content if block.type == "text").strip()
-        return json.loads(text)
+        return json.loads(_text_of(response))
+
+
+class ClaudeJudgeClient(ClaudeClient):
+    """Claude backend for judge.py.
+
+    Scoring captions with another model family can reduce self-preference bias
+    (a model tends to rate its own outputs generously).
+    Implements the same `generate_json(prompt, schema, frames_b64=None)` interface as
+    the generator clients so judge.py can use any backend interchangeably.
+    """

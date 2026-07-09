@@ -1,9 +1,9 @@
 """Core video -> multi-style caption pipeline."""
 import os
 import tempfile
+from typing import Protocol
 
 import config
-from llm_client import FireworksClient
 from video_utils import (
     choose_num_frames,
     download_video,
@@ -11,6 +11,15 @@ from video_utils import (
     frame_to_b64,
     get_duration_seconds,
 )
+
+
+class CaptionClient(Protocol):
+    def describe_frames(self, frames_b64: list[str], prompt: str, max_tokens: int = 1024) -> str:
+        ...
+
+    def generate_json(self, prompt: str, schema: dict, frames_b64: list[str] | None = None,
+                      max_tokens: int = 1024) -> dict:
+        ...
 
 STYLE_GUIDE = {
     "formal": (
@@ -43,7 +52,9 @@ DESCRIBE_PROMPT = (
     "the setting and time of day, the main subject(s), what they are doing, how the action "
     "progresses across the frames, and any distinctive visual details (colours, weather, "
     "objects, visible text, camera angle or motion). 4-6 sentences. Describe only what is "
-    "clearly visible in the frames; do not speculate or invent details."
+    "clearly visible in the frames; do not speculate or invent details. Do not identify a "
+    "city, country, company, building, or sign text unless it is large, legible, and "
+    "unambiguous in the sampled frames."
 )
 
 
@@ -58,8 +69,10 @@ def _style_prompt(description: str, styles: list[str]) -> str:
         "actual video content, and (2) how well it matches its requested tone. So each caption "
         "- including the funny ones - must name at least one concrete, specific visual detail "
         "from the description (a colour, an object, a distinguishing feature, a setting "
-        "detail) rather than a generic paraphrase, and must stand alone without the other "
-        "captions. Write in English. Do not mention frames, images, descriptions, or that "
+        "detail) rather than a generic paraphrase, and must stand alone. "
+        "Avoid named places, brands, building names, or exact sign text unless the "
+        "description says the text is unmistakably legible. "
+        "Write in English. Do not mention frames, images, descriptions, or that "
         "this is a video analysis. Respond with only a single JSON object matching the "
         "requested schema, no other text."
     )
@@ -74,7 +87,7 @@ def _caption_schema(styles: list[str]) -> dict:
     }
 
 
-def _describe_video(video_url: str, client: FireworksClient) -> str:
+def _describe_video(video_url: str, client: CaptionClient) -> str:
     with tempfile.TemporaryDirectory() as tmp_dir:
         video_path = os.path.join(tmp_dir, "clip.mp4")
         download_video(video_url, video_path)
@@ -95,13 +108,13 @@ def _describe_video(video_url: str, client: FireworksClient) -> str:
         return client.describe_frames(frames_b64, DESCRIBE_PROMPT.format(n=len(frames_b64)))
 
 
-def describe_video(video_url: str, client: FireworksClient) -> str:
+def describe_video(video_url: str, client: CaptionClient) -> str:
     """Return just the factual scene description (no style rewriting)."""
     return _describe_video(video_url, client)
 
 
 def captions_from_description(description: str, styles: list[str],
-                              client: FireworksClient) -> dict:
+                              client: CaptionClient) -> dict:
     """Rewrite a factual description into one caption per requested style.
 
     Uses structured outputs, so the response is guaranteed to be valid JSON with
@@ -119,6 +132,6 @@ def captions_from_description(description: str, styles: list[str],
     return result
 
 
-def caption_video(video_url: str, styles: list[str], client: FireworksClient) -> dict:
+def caption_video(video_url: str, styles: list[str], client: CaptionClient) -> dict:
     description = _describe_video(video_url, client)
     return captions_from_description(description, styles, client)

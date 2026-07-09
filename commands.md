@@ -26,5 +26,6 @@ python3 judge.py                                                    # score ever
 cat sample_output/judged_results.json
 ```
 
-To change the model, edit `FIREWORKS_MODEL_ID` in `.env` (defaults to
-`accounts/fireworks/models/kimi-k2p6`), then rerun.
+To change the submitted generator model, edit `CLAUDE_MODEL_ID` in `.env` (defaults to
+`claude-sonnet-5`), then rerun. Fireworks settings are only needed for judge/dev
+experiments.
