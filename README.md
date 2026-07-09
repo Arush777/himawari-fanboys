@@ -3,8 +3,10 @@
 Pipeline: download clip → sample frames with ffmpeg (~1 frame per 5s, 8–20 frames depending
 on clip length) → describe frames with a vision model → rewrite the description into 4
 styles in one structured-outputs call (guaranteed-valid JSON). Uses the Fireworks API,
-model defaults to `accounts/fireworks/models/kimi-k2p6` (vision-capable, reasoning
-disabled per-call for speed); override via `FIREWORKS_MODEL_ID`.
+model defaults to `accounts/fireworks/models/qwen3p7-plus` (vision-capable, reasoning
+disabled per-call for speed); override via `FIREWORKS_MODEL_ID`. This default won an
+internal A/B test (see "Choosing a model" below) against `kimi-k2p6`/`kimi-k2p7-code` on
+accuracy and tone_fit, at roughly 1/2.4 the token cost.
 
 Two ways to run the same pipeline:
 
@@ -86,13 +88,34 @@ touching code — just edit `.env`:
 
 ```
 FIREWORKS_API_KEY=fw_...
-FIREWORKS_MODEL_ID=accounts/fireworks/models/kimi-k2p6   # vision-capable models only
-# JUDGE_MODEL_ID=accounts/fireworks/models/kimi-k2p6      # optional, defaults to FIREWORKS_MODEL_ID
+FIREWORKS_MODEL_ID=accounts/fireworks/models/qwen3p7-plus   # vision-capable models only
 ```
 
 Then rerun `python3 main.py` (see below). Note: your Fireworks account needs access to a
 vision-capable model (`supports_image_input: true` when listing `/v1/models`) — check
-`https://fireworks.ai/models` for what's enabled on your key.
+`https://fireworks.ai/models` for what's enabled on your key. `GET /v1/models` is also the
+fastest way to sanity-check a model name before wiring it in — plenty of names on the
+Fireworks catalog page return 404 ("not deployed") when actually called on a given account.
+
+### Choosing a model
+
+Different vision models on Fireworks behave differently enough that a swap should be
+tested, not assumed. `qwen3p7-plus` was picked after an internal A/B test using `judge.py`
+(with `JUDGE_PROVIDER=anthropic`, a different model family, to avoid a model favoring its
+own captions) against `kimi-k2p6` (the previous default) and `kimi-k2p7-code` on the 3
+sample clips:
+
+| model | avg accuracy | avg tone_fit | notes |
+|---|---|---|---|
+| `qwen3p7-plus` | 4.17 | 4.75 | current default; ~1/2.4 the token cost of either Kimi variant, fastest in testing |
+| `kimi-k2p7-code` | 4.08 | 4.67 | comparable quality, ~2.4x the cost |
+| `kimi-k2p6` | 3.92 | 4.67 | previous default |
+| `minimax-m3` | — | — | cheapest listed, but ignored the `json_schema` constraint under load and returned unparseable duplicate JSON blocks — do not use for the caption-generation call without further testing |
+
+This is a 3-clip sample, so treat differences under ~0.2 as noise — but the `minimax-m3`
+failure is a hard, reproducible finding: invalid JSON scores zero per the Track 2 rules, so
+"cheapest" isn't a usable axis if reliability isn't there. If you swap in a new model,
+rerun this same A/B before trusting it in a submission.
 
 ## Before you build
 
@@ -134,6 +157,17 @@ export RESULTS_PATH="$(pwd)/sample_output/results.json"
 export JUDGE_OUTPUT_PATH="$(pwd)/sample_output/judged_results.json"
 python3 judge.py
 cat sample_output/judged_results.json
+```
+
+By default the judge scores with the same Fireworks model as generation. To judge with
+Claude instead (recommended — a different model family avoids a judge being lenient on its
+own outputs; also `pip install anthropic` first, since it isn't in requirements.txt):
+
+```bash
+export JUDGE_PROVIDER=anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
+export JUDGE_MODEL_ID=claude-sonnet-5   # optional, this is the default for this provider
+python3 judge.py
 ```
 
 ## Build & run in Docker (this is what actually gets graded)
@@ -182,7 +216,7 @@ On Streamlit Community Cloud (free, no server needed):
 
    ```toml
    FIREWORKS_API_KEY = "fw_..."
-   # optional: FIREWORKS_MODEL_ID = "accounts/fireworks/models/kimi-k2p6"
+   # optional: FIREWORKS_MODEL_ID = "accounts/fireworks/models/qwen3p7-plus"
    ```
 
 `packages.txt` makes Streamlit Cloud install ffmpeg; `app.py` copies the secrets into the

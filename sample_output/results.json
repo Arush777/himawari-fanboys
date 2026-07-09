@@ -2,28 +2,28 @@
   {
     "task_id": "v1",
     "captions": {
-      "formal": "A long-exposure, elevated static shot captures heavy vehicular traffic flowing in both directions on a multi-lane urban street in South Korea, with autumn ginkgo trees, residential towers, and commercial buildings visible during late afternoon.",
-      "sarcastic": "South Korea really knows how to make sitting in traffic look almost as beautiful as actually getting somewhere.",
-      "humorous_tech": "The right lanes are running on a 1998 dial-up connection while the left lanes somehow got fiber optic. Classic bandwidth inequality.",
-      "humorous_non_tech": "Every lane thinks it's the smart choice until you're already stuck between a bus and a life decision you made three exits ago."
+      "formal": "This time-lapse footage presents a high-angle view of a multi-lane urban intersection with heavy vehicle traffic, framed by tall residential buildings and yellow ginkgo trees under clear daylight conditions.",
+      "sarcastic": "It is truly inspiring to watch thousands of commuters rush past the Korea Tectes Engineering building with such urgent, blurred efficiency.",
+      "humorous_tech": "The traffic flow looks like a successful deployment where every car merged without a single conflict, though the motion blur suggests the render time was set to maximum speed.",
+      "humorous_non_tech": "The yellow ginkgo trees are trying their best to provide a scenic autumn backdrop, but the cars are moving so fast they barely notice the pretty leaves."
     }
   },
   {
     "task_id": "v2",
     "captions": {
-      "formal": "A small orange kitten walks slowly through a wooded area toward a low-angle camera, maintaining direct eye contact as it moves through dappled sunlight and undergrowth.",
-      "sarcastic": "A tiny orange predator executes a devastatingly slow ambush through three feet of forest undergrowth.",
-      "humorous_tech": "Kitten.exe has stopped buffering and is now approaching the camera at 0.01 Mbps with tail uptime at 100%.",
-      "humorous_non_tech": "This kitten is walking toward you like someone who just remembered they left the stove on but also really wants a hug."
+      "formal": "A small ginger kitten walks forward from a shaded area of dirt and green foliage toward a low-angle camera lens during the daytime.",
+      "sarcastic": "The ginger kitten demonstrates breathtaking bravery by walking three feet across some dirt while maintaining intense eye contact.",
+      "humorous_tech": "The ginger kitten initiates a physical proximity scan, walking steadily toward the lens to debug the connection with its large, unblinking eyes.",
+      "humorous_non_tech": "This ginger kitten has spotted you and is walking over to demand the tribute of treats it believes you are hiding in your pockets."
     }
   },
   {
     "task_id": "v3",
     "captions": {
-      "formal": "A woman with her hair in a large bun, wearing a light-colored jacket over an orange top, types on a keyboard at a white desk in a modern office with circular overhead lighting and glass partitions.",
-      "sarcastic": "Truly inspiring to watch someone achieve the impossible feat of sitting still and pressing buttons for an entire afternoon.",
-      "humorous_tech": "She's been waiting for her code to compile for three hours now, but the loading bar is just another employee walking past her glass partition.",
-      "humorous_non_tech": "She's been staring at that screen so long she's started to wonder if the potted plant behind her is silently judging her life choices."
+      "formal": "A Black woman wearing an orange top and light-colored jacket types on a keyboard at a white desk in a modern office setting.",
+      "sarcastic": "She demonstrates the thrilling ability to look at a screen and press keys without falling out of her black office chair.",
+      "humorous_tech": "Her fingers are flying across the keyboard, likely trying to push a hotfix to production before the silver all-in-one computer decides to update itself.",
+      "humorous_non_tech": "She is typing with the intense focus of someone who just remembered they left the oven on, or perhaps just trying to finish before lunch."
     }
   }
 ]

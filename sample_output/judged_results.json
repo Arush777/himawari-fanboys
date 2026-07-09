@@ -1,8 +1,8 @@
 {
   "summary": {
     "num_tasks": 3,
-    "avg_accuracy": 3.92,
-    "avg_tone_fit": 4.58
+    "avg_accuracy": 4.17,
+    "avg_tone_fit": 4.75
   },
   "results": [
     {
@@ -11,22 +11,22 @@
         "formal": {
           "accuracy": 5,
           "tone_fit": 5,
-          "notes": "Correctly identifies long-exposure elevated static shot, heavy bidirectional traffic, multi-lane urban street, South Korea setting (KOREA E&C sign visible), autumn ginkgo trees (yellow foliage on both sides), residential towers (background high-rises), commercial buildings (left foreground structures), and late afternoon lighting (golden warm light, long shadows). Professional, objective, factual tone with one declarative sentence, no slang or opinions."
+          "notes": "Accurately describes the high-angle time-lapse of a multi-lane road with heavy traffic, tall residential buildings, and yellow ginkgo trees under clear daylight; stated as a single objective declarative sentence with no opinion or slang."
         },
         "sarcastic": {
-          "accuracy": 4,
-          "tone_fit": 5,
-          "notes": "Accurately references South Korea (KOREA E&C sign), traffic, and the visual beauty of autumn ginkgo trees. The mock admiration ('really knows how to make sitting in traffic look almost as beautiful') fits sarcastic understatement. Slightly understates the actual motion visible\u2014traffic is flowing, not completely stopped\u2014so 'sitting in traffic' is slightly less accurate than 'heavy flowing traffic.'"
-        },
-        "humorous_tech": {
           "accuracy": 3,
           "tone_fit": 4,
-          "notes": "The left lanes do show more motion blur (faster movement) while right lanes are more congested with clearer vehicles, so the speed differential maps onto 'dial-up vs fiber optic.' However, the '1998 dial-up' and 'fiber optic' are pure tech references with no visual grounding in actual infrastructure. The scene is still recognisable as traffic lanes. One point deducted for accuracy because the congestion pattern is intermittent across frames, not consistently left-fast/right-slow."
+          "notes": "Correctly references the visible 'Korea Illies Engineering' building (misnamed as 'Korea Tectes Engineering') and blurred traffic, but exaggerates volume as 'thousands of commuters' which is not really shown; tone is appropriately dry and mock-admiring."
         },
-        "humorous_non_tech": {
+        "humorous_tech": {
           "accuracy": 4,
           "tone_fit": 5,
-          "notes": "Accurately captures the relatable experience of lane choice and regret in heavy traffic, with buses visible in multiple frames (frame 1, 2, 6). 'Stuck between a bus' directly references visible buses. The 'life decision you made three exits ago' humorously exaggerates the urban highway setting with multiple lanes and exits. Warm, everyday humor with no tech references. Slight accuracy deduction because 'already stuck' implies immobility, but traffic is actually moving, albeit slowly."
+          "notes": "Uses a tech/deploy metaphor mapped onto the visible smooth, blurred traffic flow with no visible collisions, fitting the clip well; slightly exaggerates 'every car merged without conflict' since lanes are separate, but overall consistent with the scene."
+        },
+        "humorous_non_tech": {
+          "accuracy": 5,
+          "tone_fit": 5,
+          "notes": "Directly reflects the visible yellow ginkgo trees lining the road and the fast-moving, blurred cars, using relatable non-tech humor without any science/tech references."
         }
       }
     },
@@ -36,22 +36,22 @@
         "formal": {
           "accuracy": 5,
           "tone_fit": 5,
-          "notes": "Accurately describes the orange kitten, slow walking motion, wooded/undergrowth setting, low camera angle, direct eye contact, and dappled sunlight visible in all frames. Tone is objective, factual, declarative with no slang or opinions\u2014perfectly matches professional stock-footage style."
+          "notes": "Accurately describes a small ginger kitten walking through shaded dirt and green foliage toward a low camera, matching the daytime forest setting seen in all frames."
         },
         "sarcastic": {
           "accuracy": 4,
-          "tone_fit": 5,
-          "notes": "The 'tiny orange predator' and 'devastatingly slow ambush' are ironic exaggerations of the kitten's actual slow, tentative approach. 'Three feet of forest undergrowth' slightly overstates the small bush setting (more a narrow dirt path between shrubs than dense forest), but the deadpan mock-dramatic tone fits sarcasm perfectly."
+          "tone_fit": 4,
+          "notes": "The kitten does walk toward camera with steady eye contact across dirt, so the mock-praise about 'breathtaking bravery' for a short walk fits the deadpan tone well, though 'three feet' is an invented specific detail."
         },
         "humorous_tech": {
           "accuracy": 4,
           "tone_fit": 5,
-          "notes": "'Stopped buffering' maps well to the kitten's initial stillness then movement; 'approaching at 0.01 Mbps' humorously captures the extremely slow walking pace visible across frames; 'tail uptime at 100%' matches the upright tail seen especially in frames 7-8. The scene remains clearly recognisable as a kitten approaching camera."
+          "notes": "Kitten's steady walk and wide-eyed stare toward the lens are clearly visible, and the 'proximity scan'/'debug the connection' tech joke maps neatly onto the action without misrepresenting the scene."
         },
         "humorous_non_tech": {
           "accuracy": 4,
           "tone_fit": 5,
-          "notes": "The 'left the stove on' captures the kitten's slightly urgent yet distracted expression and hurried-but-slow gait; 'really wants a hug' fits the direct eye contact and approaching movement toward camera. Pure everyday relatable humor with zero tech references, grounded in the visible action and kitten's demeanor."
+          "notes": "The kitten walking directly toward the camera with big eyes supports the playful 'demanding treats' framing, staying relatable and warm without any tech references, though the pocket/treat detail is invented."
         }
       }
     },
@@ -61,22 +61,22 @@
         "formal": {
           "accuracy": 5,
           "tone_fit": 5,
-          "notes": "Accurately describes the woman's large bun hairstyle, light-colored jacket over orange top, typing action, white desk, modern office setting with circular overhead lights and glass partitions visible in frames 1-8. Professional, factual tone with no slang or opinions."
+          "notes": "Accurately describes a Black woman in orange top and light jacket typing at a white desk in a modern office with visible plants and glass walls in background; matches objective factual tone perfectly."
         },
         "sarcastic": {
           "accuracy": 3,
           "tone_fit": 4,
-          "notes": "The 'sitting still and pressing buttons' description loosely matches the typing action visible, but 'entire afternoon' is unsupported by the 8 frames (no time indication). 'Achieve the impossible feat' provides dry mock admiration fitting sarcastic tone, though the exaggeration slightly undercuts accuracy."
+          "notes": "Captures the mundane typing action well with dry wit, but the chair is not black (it appears dark/black-ish but partially white/gray, and she's not really at risk of falling), a minor inaccuracy; tone is appropriately deadpan."
         },
         "humorous_tech": {
-          "accuracy": 2,
-          "tone_fit": 3,
-          "notes": "No loading bar, code compilation, or any technology reference visible in frames 1-8. The 'another employee walking past her glass partition' element is fabricated\u2014no person walks past in these frames. The scene is not recognisable from this caption. Tech joke structure is present but not grounded in visible content."
+          "accuracy": 4,
+          "tone_fit": 5,
+          "notes": "Correctly identifies the silver all-in-one computer and fast typing/fingers on keyboard, tech joke about hotfix/update fits the office computer setting well; scene remains recognizable."
         },
         "humorous_non_tech": {
           "accuracy": 4,
-          "tone_fit": 4,
-          "notes": "The potted plant behind her is clearly visible in frames 1-4, grounding the caption in actual scene elements. The 'silently judging her life choices' personification is warm, relatable everyday humor with no tech references. However, 'staring at that screen so long' is slightly exaggerated for 8 frames of active typing."
+          "tone_fit": 5,
+          "notes": "Matches her visibly focused, slightly tense expression while typing; relatable non-tech humor about oven/lunch fits the everyday office scene without any tech references."
         }
       }
     }

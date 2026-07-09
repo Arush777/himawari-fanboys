@@ -23,7 +23,7 @@ import tempfile
 from concurrent.futures import ThreadPoolExecutor
 
 import config
-from llm_client import FireworksClient
+from llm_client import ClaudeJudgeClient, FireworksClient
 from pipeline import STYLE_GUIDE
 from video_utils import (
     choose_num_frames,
@@ -56,11 +56,15 @@ JUDGE_PROMPT = (
 
 
 def _judge_schema(styles: list[str]) -> dict:
+    # No minimum/maximum on the integers: Fireworks' json_schema mode doesn't fully
+    # support them either way, and Anthropic's structured outputs rejects them
+    # outright ("For 'integer' type, properties maximum, minimum are not supported").
+    # The 1-5 range is enforced by the prompt wording instead.
     per_style = {
         "type": "object",
         "properties": {
-            "accuracy": {"type": "integer", "minimum": 1, "maximum": 5},
-            "tone_fit": {"type": "integer", "minimum": 1, "maximum": 5},
+            "accuracy": {"type": "integer"},
+            "tone_fit": {"type": "integer"},
             "notes": {"type": "string"},
         },
         "required": ["accuracy", "tone_fit", "notes"],
@@ -108,7 +112,10 @@ def main() -> int:
     with open(RESULTS_PATH, "r") as f:
         results = json.load(f)
 
-    client = FireworksClient(config.FIREWORKS_API_KEY, config.JUDGE_MODEL_ID, config.FIREWORKS_BASE_URL)
+    if config.JUDGE_PROVIDER == "anthropic":
+        client = ClaudeJudgeClient(config.ANTHROPIC_API_KEY, config.JUDGE_MODEL_ID)
+    else:
+        client = FireworksClient(config.FIREWORKS_API_KEY, config.JUDGE_MODEL_ID, config.FIREWORKS_BASE_URL)
 
     def run(result: dict) -> dict:
         task_id = result["task_id"]

@@ -56,11 +56,12 @@ def _style_prompt(description: str, styles: list[str]) -> str:
         f"{style_lines}\n\n"
         "Every caption is judged separately on two things: (1) how accurately it reflects the "
         "actual video content, and (2) how well it matches its requested tone. So each caption "
-        "- including the funny ones - must clearly reference the real subject, setting, and "
-        "action of the clip, and must stand alone without the other captions. Write in "
-        "English. Do not mention frames, images, descriptions, or that this is a video "
-        "analysis. Respond with only a single JSON object matching the requested schema, no "
-        "other text."
+        "- including the funny ones - must name at least one concrete, specific visual detail "
+        "from the description (a colour, an object, a distinguishing feature, a setting "
+        "detail) rather than a generic paraphrase, and must stand alone without the other "
+        "captions. Write in English. Do not mention frames, images, descriptions, or that "
+        "this is a video analysis. Respond with only a single JSON object matching the "
+        "requested schema, no other text."
     )
 
 
