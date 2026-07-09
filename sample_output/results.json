@@ -2,28 +2,28 @@
   {
     "task_id": "v1",
     "captions": {
-      "formal": "This time-lapse video shows continuous traffic flow along a multi-lane, tree-lined urban roadway with yellow autumn foliage, captured from an elevated viewpoint with a city skyline and distant mountains in the background under a bright, hazy daytime sky.",
-      "sarcastic": "Wow, cars driving on a road lined with pretty yellow trees while a skyline just sits there looking scenic in the background, truly the pinnacle of edge-of-your-seat entertainment.",
-      "humorous_tech": "Traffic streams through the intersection like packets through a congested router, blurring past yellow-leaved trees while the skyline hums quietly in the background, no buffering required.",
-      "humorous_non_tech": "Everyone's rushing somewhere under those golden autumn trees, probably late for dinner or desperately trying to beat the next red light before the sun changes its mind about staying warm."
+      "formal": "A fixed time-lapse from an elevated vantage point captures heavy two-way traffic streaking along a multi-lane urban road lined with autumn trees and high-rise apartments, with distant mountains visible beneath a hazy late-afternoon sky.",
+      "sarcastic": "Nothing says relaxing autumn evening quite like watching endless streaks of cars blur past golden trees while distant mountains politely pretend not to notice the traffic.",
+      "humorous_tech": "The cars race through the intersection as motion-blurred streaks like data packets flooding a single overloaded router, while the traffic signals bravely try to throttle the bandwidth beneath those cheerful orange autumn trees.",
+      "humorous_non_tech": "The cars blur past like everyone's suddenly remembered they left something on the stove, while the yellow and orange trees just stand there enjoying the warm afternoon sun without a care in the world."
     }
   },
   {
     "task_id": "v2",
     "captions": {
-      "formal": "A small orange and white kitten walks steadily toward the camera across a dirt-covered, leaf-strewn forest floor, with dappled sunlight and hanging vines visible in the softly blurred background.",
-      "sarcastic": "Oh sure, just a tiny kitten casually strutting through the woods like it's the star of its own nature documentary, one deliberate paw-step at a time.",
-      "humorous_tech": "Kitten.exe is running a flawless forward-motion loop, front paw extended in every frame like it's rendering itself walking toward the camera in real time, no lag detected despite the leafy background blur.",
-      "humorous_non_tech": "Someone forgot to tell this fluffy orange and white kitten that the woods are supposed to be scary, because it's strutting through twigs and dappled sunlight like it owns the whole forest."
+      "formal": "An orange-and-white long-haired kitten walks steadily along a dirt path toward the camera in a shaded wooded area with dappled sunlight filtering through overhead foliage.",
+      "sarcastic": "Nothing says fearsome jungle predator quite like a fluffy orange kitten strolling down a dirt path with its tail proudly raised in triumph.",
+      "humorous_tech": "The orange kitten advances frame by frame like a progress bar loading toward the camera, and by the time its tail goes fully upright, the download has finally hit one hundred percent.",
+      "humorous_non_tech": "This little orange-and-white kitten is approaching down the leafy dirt path with the confident tail-up strut of someone who just heard the dinner bowl being filled."
     }
   },
   {
     "task_id": "v3",
     "captions": {
-      "formal": "A woman with a curly bun hairstyle, wearing a beige jacket over an orange top, is shown typing at a keyboard in front of a large monitor in a modern glass-partitioned office as the camera slowly moves closer from the side.",
-      "sarcastic": "Wow, a woman typing at a desk with a corded mouse next to a plant\u2014truly the most riveting office footage since the invention of the swivel chair.",
-      "humorous_tech": "She's typing with the intense focus of someone debugging production at 4:59pm on a Friday, while that poor corded mouse just lies there unemployed since she's clearly a keyboard-only warrior.",
-      "humorous_non_tech": "That's the universal face of someone typing an email they've rewritten four times, rocking a killer curly bun that's doing more work than some of her coworkers."
+      "formal": "A young woman in a light beige shirt over an orange top works at a desktop computer in a modern open-plan office with circular ceiling lights and a green potted plant in the background.",
+      "sarcastic": "Nothing says peak productivity like staring intently at a monitor beside a nest of tangled cables that clearly no one has dared to touch in months.",
+      "humorous_tech": "She types with the focused calm of someone who just pushed to production on a Friday, blissfully unaware that the tangled cables under her white desk are the least of her merge conflicts.",
+      "humorous_non_tech": "That neutral, laser-focused stare says she skipped breakfast and is now running purely on determination and the faint hope of a coffee break, cross necklace and pink nails holding it all together."
     }
   }
 ]

@@ -27,5 +27,5 @@ cat sample_output/judged_results.json
 ```
 
 To change the submitted generator model, edit `CLAUDE_MODEL_ID` in `.env` (defaults to
-`claude-sonnet-5`), then rerun. Fireworks settings are only needed for judge/dev
+`claude-opus-4-8`), then rerun. Fireworks settings are only needed for judge/dev
 experiments.

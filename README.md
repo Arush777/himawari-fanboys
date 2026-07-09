@@ -1,9 +1,9 @@
 # AMD Hackathon — Track 2: Video Captioning Agent
 
 Pipeline: download clip → sample frames with ffmpeg (~1 frame per 5s, 8–20 frames depending
-on clip length) → describe frames with Claude Sonnet vision → rewrite the description into
+on clip length) → describe frames with Claude Opus vision → rewrite the description into
 4 styles in one structured-outputs call (valid JSON with exactly the requested style keys).
-The submitted generator defaults to `claude-sonnet-5`; override via `CLAUDE_MODEL_ID`.
+The submitted generator defaults to `claude-opus-4-8`; override via `CLAUDE_MODEL_ID`.
 
 Two ways to run the same pipeline:
 
@@ -82,7 +82,7 @@ Claude models without touching code — just edit `.env`:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-...
-CLAUDE_MODEL_ID=claude-sonnet-5
+CLAUDE_MODEL_ID=claude-opus-4-8
 ```
 
 Then rerun `python3 main.py` (see below). Fireworks variables are optional and are only
@@ -90,10 +90,8 @@ needed when using `judge.py` with a Fireworks judge.
 
 ### Submission model history
 
-The project has been tested through three generator backends: Claude Haiku, Fireworks
-Qwen, and now Claude Sonnet. The current submitted image uses Sonnet as the VLM/generator
-because Track 2 is judged on caption accuracy and tone fit, and Sonnet is the strongest
-vision-language option available in this setup.
+The project has been tested through Claude Haiku, Fireworks Qwen, Claude Sonnet, and now
+Claude Opus. The current submitted image uses Opus as the VLM/generator.
 
 ## Before you build
 
@@ -143,7 +141,7 @@ Claude instead, set:
 ```bash
 export JUDGE_PROVIDER=anthropic
 export ANTHROPIC_API_KEY=sk-ant-...
-export JUDGE_MODEL_ID=claude-sonnet-5   # optional, this is the default for this provider
+export JUDGE_MODEL_ID=claude-sonnet-5
 python3 judge.py
 ```
 
@@ -193,7 +191,7 @@ On Streamlit Community Cloud (free, no server needed):
 
    ```toml
    ANTHROPIC_API_KEY = "sk-ant-..."
-   # optional: CLAUDE_MODEL_ID = "claude-sonnet-5"
+   # optional: CLAUDE_MODEL_ID = "claude-opus-4-8"
    ```
 
 `packages.txt` makes Streamlit Cloud install ffmpeg; `app.py` copies the secrets into the
