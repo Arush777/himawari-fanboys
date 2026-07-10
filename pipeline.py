@@ -12,7 +12,9 @@ on 30s-2min clips, then layering in two more stages):
      picks the best caption per style (accuracy to pixels + facts + unmistakable tone).
   4. One CRITIQUE call scores the selected captions 1-5 accuracy/tone_fit against the
      frames (same rubric judge.py uses); any caption scoring below threshold on either
-     axis gets rewritten, once, in a batched REPAIR call fed the critique's notes.
+     axis — or tripping the deterministic tech-word guard on humorous_non_tech — gets
+     rewritten, once, in a batched REPAIR call fed the critique's notes. Each rewrite
+     is re-critiqued and only kept if it scores at least as well as the original.
 
 Every stage falls back to the previous path on failure, so a task can never end up with
 empty captions because of the extra machinery, and critique/repair can never make a
@@ -20,6 +22,7 @@ result worse than skipping it (any exception there keeps the pre-critique captio
 """
 import json
 import os
+import re
 import sys
 import tempfile
 import traceback
@@ -117,7 +120,9 @@ DESCRIBE_FACTS_PROMPT = (
     "- \"facts\": a list of 5-10 short, independently-checkable claims about what is literally "
     "visible in the frames (specific objects, colours, actions, setting details, on-screen "
     "text). Each fact should be concrete enough that someone looking only at the frames could "
-    "verify it.\n\n"
+    "verify it. Order the facts from most visually prominent and persistent (the main subject "
+    "and its central action, visible across many frames) to least (background or single-frame "
+    "details), and only state a colour of a background element if it is unambiguous.\n\n"
     "Describe only what is clearly visible in the frames; do not speculate or invent details. "
     "Do not identify a city, country, company, building, or sign text unless it is large, "
     "legible, and unambiguous in the sampled frames."
@@ -167,7 +172,12 @@ def _specialist_prompt(style: str, description: str, facts: list[str]) -> str:
         "focused on, or a different joke/framing). Each caption will be scored by a "
         "judge who watches the video: 1-5 for accuracy (every claim visibly true) and "
         "1-5 for tone fit (the style must be unmistakable, not mild). Write to earn "
-        "5/5 on both. Each candidate must be consistent with at least one fact from "
+        "5/5 on both. Anchor the caption on the MAIN subject and its central action — "
+        "the first facts in the list — not on background or peripheral details: a "
+        "strict judge marks down any claim about background colours, object counts, "
+        "small text, or things visible only for a moment, so a joke built on a shaky "
+        "peripheral detail loses points that a joke built on the main action keeps. "
+        "Each candidate must be consistent with at least one fact from "
         "the list above and must not contradict the description, be 1-2 sentences, "
         "in English. Never mention frames, images, descriptions, or video analysis. "
         "Avoid named places, brands, or sign text unless the description says they "
@@ -190,9 +200,12 @@ def _selection_prompt(description: str, facts: list[str], candidates: dict) -> s
         "The frames are ground truth. For EACH style, choose the candidate that (1) is "
         "more accurate - every claim visibly true in the frames and consistent with "
         "the facts above - and (2) has the more unmistakable, sharper execution of "
-        "its style. Return the chosen caption TEXT exactly as written, one per style, "
-        "in a JSON object keyed by style name. Do not rewrite, merge, or edit the "
-        "captions; copy the winner verbatim."
+        "its style. Accuracy outranks flash: a funnier caption containing even one "
+        "claim a strict judge could not verify from the frames (a background colour, "
+        "a count, a fleeting detail) loses to a slightly plainer one whose every "
+        "claim is checkable. Return the chosen caption TEXT exactly as written, one "
+        "per style, in a JSON object keyed by style name. Do not rewrite, merge, or "
+        "edit the captions; copy the winner verbatim."
     )
 
 
@@ -273,6 +286,55 @@ def build_critique_prompt(captions: dict, styles: list[str], num_frames: int) ->
     return CRITIQUE_PROMPT.format(n=num_frames, captions_block=captions_block, style_block=style_block)
 
 
+# Deterministic guard for humorous_non_tech's hard negative constraint ("absolutely NO
+# technology, programming, internet, or science references"). The LLM critique has passed
+# captions that leaked tech vocabulary (a tone_fit 2 on the leaderboard run), so this
+# lexical check forces such a caption into repair regardless of its critique score.
+# High-precision terms only: everyday-ambiguous words (cloud, mouse, bug, web, server,
+# charging, loading, devices, ram...) are deliberately excluded — a false trip would
+# force a pointless rewrite of a good caption.
+_TECH_WORDS_RE = re.compile(
+    r"\b("
+    r"wi-?fi|internet|online|website|apps?|software|hardware|computers?|laptops?|"
+    r"phones?|smartphones?|iphone|android|screens?|monitor|keyboard|robots?|robotic|"
+    r"ai|algorithms?|coding|programming|programmer|developer|debug|debugging|deploys?|"
+    r"deployed|database|digital|electronic|electronics|tech|technology|browser|email|"
+    r"texting|password|pixels?|buffering|downloads?|downloading|uploads?|uploading|"
+    r"reboots?|rebooting|battery|batteries|bluetooth|gps|drones?|livestream|podcast|"
+    r"selfie|video ?games?|videogames?|glitch|glitching|notifications?|spreadsheets?|"
+    r"hashtag|autocorrect|screensaver|cpu|gpu|usb|hdmi|scientists?|scientific|physics|"
+    r"chemistry|biology|laboratory|molecules?|atoms?|gravity|dna"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def tech_guard_violations(caption: str) -> list[str]:
+    """Tech/science words in a caption that humorous_non_tech is banned from using."""
+    return sorted({m.group(0).lower() for m in _TECH_WORDS_RE.finditer(caption or "")})
+
+
+def _apply_tech_guard(captions: dict, critique: dict) -> dict:
+    """Override the critique for humorous_non_tech when the lexical guard trips, so the
+    caption is forced into repair with an explicit instruction naming the leaked words."""
+    style = "humorous_non_tech"
+    if style not in captions:
+        return critique
+    leaks = tech_guard_violations(captions[style])
+    if not leaks:
+        return critique
+    patched = dict(critique)
+    entry = dict(patched.get(style, {}))
+    entry["tone_fit"] = 1
+    entry["notes"] = (
+        f"{entry.get('notes', '')} The caption violates the style's absolute ban on "
+        f"technology/science references (found: {', '.join(leaks)}); rewrite it with "
+        f"zero such references."
+    ).strip()
+    patched[style] = entry
+    return patched
+
+
 def critique_captions(captions: dict, styles: list[str], frames_b64: list[str],
                        client: CaptionClient) -> dict:
     """Score each style's caption for accuracy/tone_fit against frames already in memory
@@ -308,12 +370,21 @@ def _repair_prompt(weak_styles: list[str], captions: dict, critique: dict,
     )
 
 
+def _critique_sum(critique: dict, style: str) -> int:
+    entry = critique.get(style, {})
+    return int(entry.get("accuracy", 0)) + int(entry.get("tone_fit", 0))
+
+
 def repair_weak_captions(captions: dict, critique: dict, description: str, facts: list[str],
                           frames_b64: list[str], client: CaptionClient,
                           threshold: int = config.CRITIQUE_THRESHOLD) -> dict:
     """Rewrite, once, only the captions the critique scored below `threshold` on either
     axis — feeding back the critique's notes as the repair instruction, not just the
-    score. A failed or empty repair keeps the pre-repair caption rather than blanking it."""
+    score. Verify-before-accept: each rewrite is re-critiqued against the frames and only
+    kept if it scores at least as well as the original, so repair is monotonic under the
+    critic (it can no longer swap a 4 for a 3). A failed or empty repair keeps the
+    pre-repair caption rather than blanking it; a failed re-critique accepts the rewrite
+    (the pre-verification behaviour)."""
     weak = [
         s for s in captions
         if critique.get(s, {}).get("accuracy", 5) < threshold
@@ -326,12 +397,27 @@ def repair_weak_captions(captions: dict, critique: dict, description: str, facts
         _repair_prompt(weak, captions, critique, description, facts), _caption_schema(weak),
         frames_b64=frames_b64,
     )
+    rewrites = {
+        s: str(repaired.get(s, "")).strip()
+        for s in weak
+        if str(repaired.get(s, "")).strip()
+        and str(repaired.get(s, "")).strip() != captions[s]
+    }
+    if not rewrites:
+        return captions
 
     result = dict(captions)
-    for s in weak:
-        new_val = str(repaired.get(s, "")).strip()
-        if new_val:
-            result[s] = new_val
+    try:
+        recritique = _apply_tech_guard(
+            rewrites, critique_captions(rewrites, list(rewrites), frames_b64, client),
+        )
+        for s, new_val in rewrites.items():
+            if _critique_sum(recritique, s) >= _critique_sum(critique, s):
+                result[s] = new_val
+    except Exception:
+        print(f"[pipeline] re-critique of repaired captions failed, accepting rewrites: "
+              f"{traceback.format_exc()}", file=sys.stderr)
+        result.update(rewrites)
     return result
 
 
@@ -458,7 +544,7 @@ def caption_video(video_url: str, styles: list[str], client: CaptionClient) -> d
     # captions rather than risking the whole task.
     if config.ENABLE_CRITIQUE_REPAIR:
         try:
-            critique = critique_captions(result, styles, frames_b64, client)
+            critique = _apply_tech_guard(result, critique_captions(result, styles, frames_b64, client))
             result = repair_weak_captions(result, critique, description, facts, frames_b64, client)
         except Exception:
             print(f"[pipeline] critique/repair failed, keeping pre-repair captions: "

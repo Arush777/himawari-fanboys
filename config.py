@@ -8,7 +8,10 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv()  # loads .env into os.environ if present; no-op if the file doesn't exist
+# override=True: a stale ANTHROPIC_API_KEY exported in the shell profile was shadowing
+# .env's valid key (load_dotenv keeps pre-existing env vars by default), causing 401s.
+# The graded Docker image contains no .env file, so `-e`/baked env vars are unaffected.
+load_dotenv(override=True)
 
 FIREWORKS_API_KEY = os.environ.get("FIREWORKS_API_KEY", "")
 # Fireworks is kept for judge/dev comparisons; the submitted generator uses Claude.
@@ -41,7 +44,10 @@ JUDGE_MODEL_ID = os.environ.get(
 SECONDS_PER_FRAME = 5.0
 MIN_FRAMES = 8
 MAX_FRAMES = 20
-FRAME_MAX_WIDTH = 768
+# 1024px (up from 768) so small details judges nitpick on — nail colour, sign text,
+# chair colour — survive the downscale; ~1.8x the vision tokens, still well inside
+# budget at 20 frames.
+FRAME_MAX_WIDTH = 1024
 
 # Post-selection critique+repair: after the specialist+selection stage picks a winner per
 # style, critique each winner against the source frames (shares judge.py's accuracy/tone_fit
@@ -51,7 +57,10 @@ FRAME_MAX_WIDTH = 768
 # Track 2 injects no env vars at `docker run` time, so this default governs the graded run;
 # override at image build time via `--build-arg ENABLE_CRITIQUE_REPAIR=false` (see Dockerfile).
 ENABLE_CRITIQUE_REPAIR = os.environ.get("ENABLE_CRITIQUE_REPAIR", "true").strip().lower() not in ("false", "0", "no", "")
-CRITIQUE_THRESHOLD = int(os.environ.get("CRITIQUE_THRESHOLD", "4"))
+# 5 (was 4): captions scoring exactly 4 were where nearly all leaderboard points leaked,
+# and repair is now verify-before-accept (a rewrite is re-critiqued and only kept if it
+# scores at least as well), so repairing 4s can no longer make a caption worse.
+CRITIQUE_THRESHOLD = int(os.environ.get("CRITIQUE_THRESHOLD", "5"))
 
 # Gemini API key: used only by the standalone, capped video-native description probe
 # (not wired into main.py or the graded pipeline). Borrowed credit — keep usage minimal.
