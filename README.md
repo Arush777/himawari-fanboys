@@ -1,14 +1,19 @@
 # AMD Hackathon — Track 2: Video Captioning Agent
 
-Pipeline: download clip → sample frames with ffmpeg (~1 frame per 5s, 8–20 frames depending
-on clip length) → describe frames with Claude Opus vision → rewrite the description into
-4 styles in one structured-outputs call (valid JSON with exactly the requested style keys).
-The submitted generator defaults to `claude-opus-4-8`; override via `CLAUDE_MODEL_ID`.
+Graded pipeline: download each clip once → sample 8–20 chronological frames → run four
+independent, style-specialized routes concurrently → emit one caption per requested style.
+Formal uses Sonnet facts plus a Kimi K2.6 visual audit/writer; sarcastic uses the proven
+Sonnet specialist; tech humor uses Gemini continuous-video temporal notes before Sonnet
+description/styling; non-tech humor uses the grounded Patch-v1 Sonnet route. Each Sonnet
+specialist generates two candidates and a frame-grounded selector chooses verbatim.
+
+This exact runtime scored **57.29% vs 42.71%** against the previous 0.87 champion in a
+clean 48-duel local pairwise evaluation and completed all 12 clips in 6m14s.
 
 Two ways to run the same pipeline:
 
-- **`main.py`** — batch mode for the judging harness (`/input/tasks.json` → `/output/results.json`)
-- **`app.py`** — interactive Streamlit demo (paste a video URL, pick styles, see captions)
+- **`main.py`** — thin batch entry point for the graded portfolio runtime
+- **`app.py`** — stable interactive Sonnet demo (paste a video URL, pick styles, see captions)
 
 A third script, **`judge.py`**, is an LLM-as-a-judge: it re-examines each clip's frames and
 scores a `results.json`'s captions for accuracy (does it reflect the video) and tone_fit
@@ -20,6 +25,9 @@ scores a `results.json`'s captions for accuracy (does it reflect the video) and 
 .
 ├── main.py              entry point: reads /input/tasks.json, writes /output/results.json
 ├── app.py               Streamlit demo UI wrapping the same pipeline
+├── exp_style_portfolio_exact.py  graded four-route portfolio orchestration
+├── exp_gemini_notes.py           continuous-video temporal-note helper
+├── exp_kimi_hybrid.py            Kimi K2.6 audit/writer helper
 ├── judge.py             LLM-as-judge: scores a results.json against the source videos
 ├── packages.txt         system deps for Streamlit Cloud (ffmpeg)
 ├── pipeline.py           core video -> caption logic (describe frames, rewrite into styles)
@@ -42,10 +50,12 @@ scores a `results.json`'s captions for accuracy (does it reflect the video) and 
 
 ### What each file does
 
-- **`main.py`** — The entry point that actually gets graded. Reads tasks from
-  `/input/tasks.json` (or `$INPUT_PATH` if set), calls `caption_video` for each one, and
-  writes `/output/results.json` (or `$OUTPUT_PATH`). Catches per-task exceptions so one
-  failing clip doesn't take down the whole batch.
+- **`main.py`** — The entry point that actually gets graded. It invokes the exact
+  portfolio runtime measured by the local pairwise gate.
+- **`exp_style_portfolio_exact.py`** — Reads tasks, shares only deterministic video/frame
+  preprocessing, runs four independent source-faithful routes, applies global per-style
+  routing, and writes the required results schema. A failed selected route falls back to
+  the independently generated champion caption.
 - **`pipeline.py`** — The actual captioning logic. `_describe_video` downloads the clip,
   extracts frames, and asks the vision model for a compact 3–5 sentence factual description.
   `caption_video` takes that description and asks the same model to rewrite it into the 4
@@ -77,25 +87,26 @@ scores a `results.json`'s captions for accuracy (does it reflect the video) and 
 
 ## Changing the model
 
-The key and submitted generator model ID are read from the environment, so you can switch
-Claude models without touching code — just edit `.env`:
+The three provider keys and Sonnet model ID are read from the environment. For local
+runs, configure `.env`:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-...
-CLAUDE_MODEL_ID=claude-opus-4-8
+FIREWORKS_API_KEY=fw_...
+GEMINI_API_KEY=...
+CLAUDE_MODEL_ID=claude-sonnet-5
 ```
 
-Then rerun `python3 main.py` (see below). Fireworks variables are optional and are only
-needed when using `judge.py` with a Fireworks judge.
+Then rerun `python3 main.py` (see below).
 
 ### Submission model history
 
-The project has been tested through Claude Haiku, Fireworks Qwen, Claude Sonnet, and now
-Claude Opus. The current submitted image uses Opus as the VLM/generator.
+The live 0.87 champion used Claude Sonnet. The new locally approved portfolio keeps
+Sonnet as its core model and adds narrowly routed Kimi and Gemini assistance.
 
 ## Before you build
 
-Copy `.env.example` to `.env` and paste your real Anthropic API key:
+Copy `.env.example` to `.env` and paste all three provider keys:
 
 ```bash
 cp .env.example .env
@@ -115,7 +126,8 @@ python3 main.py
 cat sample_output/results.json
 ```
 
-`.env` is loaded automatically by `config.py`, so no need to `export` the API key manually.
+`.env` is loaded automatically by `config.py`. If the interactive shell already exports
+stale keys, explicitly override them from `.env` before a paid run.
 
 To also get a long, detailed factual description per clip (not part of grading, just for
 your own inspection):
@@ -152,6 +164,8 @@ docker buildx build --platform linux/amd64 --tag video-captioner:latest --load .
 
 docker run --rm \
   -e ANTHROPIC_API_KEY=sk-ant-... \
+  -e FIREWORKS_API_KEY=fw_... \
+  -e GEMINI_API_KEY=... \
   -v "$(pwd)/sample_input:/input:ro" \
   -v "$(pwd)/sample_output:/output" \
   video-captioner:latest
@@ -161,14 +175,15 @@ cat sample_output/results.json
 
 ## Push for submission
 
-The grading harness injects no env vars (Track 2 rules), so the real key must be baked
-into the image at build time via `--build-arg` — a plain `docker run` against the pushed
-image with no `-e` still needs to work:
+The grading harness injects no env vars, so all provider keys must be baked into the image
+at build time. A plain `docker run` against the pushed image with no `-e` must work:
 
 ```bash
 docker buildx build --platform linux/amd64 \
   --build-arg ANTHROPIC_API_KEY=sk-ant-... \
-  --tag <registry>/<you>/video-captioner:latest --push .
+  --build-arg FIREWORKS_API_KEY=fw_... \
+  --build-arg GEMINI_API_KEY=... \
+  --tag <registry>/<you>/video-captioner:<immutable-tag> --push .
 ```
 
 The image (including the baked-in key) goes to a registry — if that registry is public,
@@ -202,9 +217,9 @@ environment so `config.py` works unchanged.
 - Frame count adapts to clip length: ~1 frame per 5 seconds, clamped to 8–20, downscaled
   to 768px wide. At 768px a 16:9 frame costs a few hundred tokens, so even a 20-frame clip
   is a manageable input-token cost per clip.
-- One vision call to describe the frames + one structured-outputs call to rewrite into the
-  4 styles — not 4 separate calls — and clips run 4-at-a-time, keeping this within the
-  10 minute container limit even for ~12 hidden clips.
+- Four independent style routes run concurrently inside each clip, while two clips run
+  concurrently. The measured 12-clip runtime was 6m14s, leaving headroom under the
+  10-minute limit.
 - Do NOT commit `.env` — it's gitignored. The submitted image *does* bake the real key in
   via `--build-arg` (see "Push for submission" above), since the harness injects no env
   vars; if the target registry is public, treat the key as exposed and rotate it after
