@@ -1,0 +1,29 @@
+[
+  {
+    "task_id": "v1",
+    "captions": {
+      "formal": "A fixed time-lapse from an elevated vantage point captures heavy two-way traffic streaking along a multi-lane urban road lined with autumn trees and high-rise apartments, with distant mountains visible beneath a hazy late-afternoon sky.",
+      "sarcastic": "Nothing says relaxing autumn evening quite like watching endless streaks of cars blur past golden trees while distant mountains politely pretend not to notice the traffic.",
+      "humorous_tech": "The cars race through the intersection as motion-blurred streaks like data packets flooding a single overloaded router, while the traffic signals bravely try to throttle the bandwidth beneath those cheerful orange autumn trees.",
+      "humorous_non_tech": "The cars blur past like everyone's suddenly remembered they left something on the stove, while the yellow and orange trees just stand there enjoying the warm afternoon sun without a care in the world."
+    }
+  },
+  {
+    "task_id": "v2",
+    "captions": {
+      "formal": "An orange-and-white long-haired kitten walks steadily along a dirt path toward the camera in a shaded wooded area with dappled sunlight filtering through overhead foliage.",
+      "sarcastic": "Nothing says fearsome jungle predator quite like a fluffy orange kitten strolling down a dirt path with its tail proudly raised in triumph.",
+      "humorous_tech": "The orange kitten advances frame by frame like a progress bar loading toward the camera, and by the time its tail goes fully upright, the download has finally hit one hundred percent.",
+      "humorous_non_tech": "This little orange-and-white kitten is approaching down the leafy dirt path with the confident tail-up strut of someone who just heard the dinner bowl being filled."
+    }
+  },
+  {
+    "task_id": "v3",
+    "captions": {
+      "formal": "A young woman in a light beige shirt over an orange top works at a desktop computer in a modern open-plan office with circular ceiling lights and a green potted plant in the background.",
+      "sarcastic": "Nothing says peak productivity like staring intently at a monitor beside a nest of tangled cables that clearly no one has dared to touch in months.",
+      "humorous_tech": "She types with the focused calm of someone who just pushed to production on a Friday, blissfully unaware that the tangled cables under her white desk are the least of her merge conflicts.",
+      "humorous_non_tech": "That neutral, laser-focused stare says she skipped breakfast and is now running purely on determination and the faint hope of a coffee break, cross necklace and pink nails holding it all together."
+    }
+  }
+]

@@ -1,0 +1,84 @@
+{
+  "summary": {
+    "num_tasks": 3,
+    "avg_accuracy": 4.17,
+    "avg_tone_fit": 4.75
+  },
+  "results": [
+    {
+      "task_id": "v1",
+      "scores": {
+        "formal": {
+          "accuracy": 5,
+          "tone_fit": 5,
+          "notes": "Accurately describes the high-angle time-lapse of a multi-lane road with heavy traffic, tall residential buildings, and yellow ginkgo trees under clear daylight; stated as a single objective declarative sentence with no opinion or slang."
+        },
+        "sarcastic": {
+          "accuracy": 3,
+          "tone_fit": 4,
+          "notes": "Correctly references the visible 'Korea Illies Engineering' building (misnamed as 'Korea Tectes Engineering') and blurred traffic, but exaggerates volume as 'thousands of commuters' which is not really shown; tone is appropriately dry and mock-admiring."
+        },
+        "humorous_tech": {
+          "accuracy": 4,
+          "tone_fit": 5,
+          "notes": "Uses a tech/deploy metaphor mapped onto the visible smooth, blurred traffic flow with no visible collisions, fitting the clip well; slightly exaggerates 'every car merged without conflict' since lanes are separate, but overall consistent with the scene."
+        },
+        "humorous_non_tech": {
+          "accuracy": 5,
+          "tone_fit": 5,
+          "notes": "Directly reflects the visible yellow ginkgo trees lining the road and the fast-moving, blurred cars, using relatable non-tech humor without any science/tech references."
+        }
+      }
+    },
+    {
+      "task_id": "v2",
+      "scores": {
+        "formal": {
+          "accuracy": 5,
+          "tone_fit": 5,
+          "notes": "Accurately describes a small ginger kitten walking through shaded dirt and green foliage toward a low camera, matching the daytime forest setting seen in all frames."
+        },
+        "sarcastic": {
+          "accuracy": 4,
+          "tone_fit": 4,
+          "notes": "The kitten does walk toward camera with steady eye contact across dirt, so the mock-praise about 'breathtaking bravery' for a short walk fits the deadpan tone well, though 'three feet' is an invented specific detail."
+        },
+        "humorous_tech": {
+          "accuracy": 4,
+          "tone_fit": 5,
+          "notes": "Kitten's steady walk and wide-eyed stare toward the lens are clearly visible, and the 'proximity scan'/'debug the connection' tech joke maps neatly onto the action without misrepresenting the scene."
+        },
+        "humorous_non_tech": {
+          "accuracy": 4,
+          "tone_fit": 5,
+          "notes": "The kitten walking directly toward the camera with big eyes supports the playful 'demanding treats' framing, staying relatable and warm without any tech references, though the pocket/treat detail is invented."
+        }
+      }
+    },
+    {
+      "task_id": "v3",
+      "scores": {
+        "formal": {
+          "accuracy": 5,
+          "tone_fit": 5,
+          "notes": "Accurately describes a Black woman in orange top and light jacket typing at a white desk in a modern office with visible plants and glass walls in background; matches objective factual tone perfectly."
+        },
+        "sarcastic": {
+          "accuracy": 3,
+          "tone_fit": 4,
+          "notes": "Captures the mundane typing action well with dry wit, but the chair is not black (it appears dark/black-ish but partially white/gray, and she's not really at risk of falling), a minor inaccuracy; tone is appropriately deadpan."
+        },
+        "humorous_tech": {
+          "accuracy": 4,
+          "tone_fit": 5,
+          "notes": "Correctly identifies the silver all-in-one computer and fast typing/fingers on keyboard, tech joke about hotfix/update fits the office computer setting well; scene remains recognizable."
+        },
+        "humorous_non_tech": {
+          "accuracy": 4,
+          "tone_fit": 5,
+          "notes": "Matches her visibly focused, slightly tense expression while typing; relatable non-tech humor about oven/lunch fits the everyday office scene without any tech references."
+        }
+      }
+    }
+  ]
+}
