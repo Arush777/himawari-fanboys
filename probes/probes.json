@@ -1,0 +1,194 @@
+[
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "formal",
+    "probe_id": "P1",
+    "expectation": "gold",
+    "caption": "This time-lapse video shows continuous traffic flow along a multi-lane, tree-lined urban roadway with yellow autumn foliage, captured from an elevated viewpoint with a city skyline and distant mountains in the background under a bright, hazy daytime sky."
+  },
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "formal",
+    "probe_id": "P2",
+    "expectation": "generic",
+    "caption": "A video showing vehicles moving along a road in a city during the day."
+  },
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "formal",
+    "probe_id": "P3",
+    "expectation": "hallucinated",
+    "caption": "Heavy nighttime traffic crawls through a snow-covered highway interchange as red brake lights reflect off wet asphalt beneath glowing neon billboards."
+  },
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P4",
+    "expectation": "wrong_tone",
+    "caption": "This time-lapse video shows continuous traffic flow along a multi-lane, tree-lined urban roadway with yellow autumn foliage, captured from an elevated viewpoint with a city skyline and distant mountains in the background under a bright, hazy daytime sky."
+  },
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "formal",
+    "probe_id": "P5",
+    "expectation": "meta_leak",
+    "caption": "Across the sampled frames, steady traffic moves along a tree-lined boulevard with yellow autumn foliage and a distant skyline."
+  },
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "formal",
+    "probe_id": "P6",
+    "expectation": "subtle_error",
+    "caption": "This time-lapse video shows continuous traffic flow along a multi-lane, tree-lined urban roadway with red autumn foliage, captured from an elevated viewpoint with a city skyline and distant mountains in the background under a bright, hazy daytime sky."
+  },
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P7",
+    "expectation": "strong_tone",
+    "caption": "Wow, cars driving on a road lined with pretty yellow trees while a skyline just sits there looking scenic in the background, truly the pinnacle of edge-of-your-seat entertainment."
+  },
+  {
+    "task_id": "v1",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P8",
+    "expectation": "mild_tone",
+    "caption": "Cars drive down a pretty tree-lined road, which is not the most exciting thing ever, I suppose."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "formal",
+    "probe_id": "P1",
+    "expectation": "gold",
+    "caption": "A small orange and white kitten walks steadily toward the camera across a dirt-covered, leaf-strewn forest floor, with dappled sunlight and hanging vines visible in the softly blurred background."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "formal",
+    "probe_id": "P2",
+    "expectation": "generic",
+    "caption": "A cute animal is seen outdoors in a natural setting."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "formal",
+    "probe_id": "P3",
+    "expectation": "hallucinated",
+    "caption": "A black puppy splashes through a shallow stream chasing a yellow tennis ball while two children laugh in the background."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P4",
+    "expectation": "wrong_tone",
+    "caption": "A small orange and white kitten walks steadily toward the camera across a dirt-covered, leaf-strewn forest floor, with dappled sunlight and hanging vines visible in the softly blurred background."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "formal",
+    "probe_id": "P5",
+    "expectation": "meta_leak",
+    "caption": "In every frame, the orange and white kitten steps closer to the camera across the leafy forest floor."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "formal",
+    "probe_id": "P6",
+    "expectation": "subtle_error",
+    "caption": "A small gray and white kitten walks steadily toward the camera across a dirt-covered, leaf-strewn forest floor, with dappled sunlight and hanging vines visible in the softly blurred background."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P7",
+    "expectation": "strong_tone",
+    "caption": "Oh sure, just a tiny kitten casually strutting through the woods like it's the star of its own nature documentary, one deliberate paw-step at a time."
+  },
+  {
+    "task_id": "v2",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/13825391-uhd_3840_2160_30fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P8",
+    "expectation": "mild_tone",
+    "caption": "A kitten walking through the woods, which is kind of amusing, I guess."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "formal",
+    "probe_id": "P1",
+    "expectation": "gold",
+    "caption": "A woman with a curly bun hairstyle, wearing a beige jacket over an orange top, is shown typing at a keyboard in front of a large monitor in a modern glass-partitioned office as the camera slowly moves closer from the side."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "formal",
+    "probe_id": "P2",
+    "expectation": "generic",
+    "caption": "A person is working indoors at a desk."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "formal",
+    "probe_id": "P3",
+    "expectation": "hallucinated",
+    "caption": "An elderly man in a gray suit delivers a presentation to a crowded boardroom while pointing at a whiteboard covered in charts."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P4",
+    "expectation": "wrong_tone",
+    "caption": "A woman with a curly bun hairstyle, wearing a beige jacket over an orange top, is shown typing at a keyboard in front of a large monitor in a modern glass-partitioned office as the camera slowly moves closer from the side."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "formal",
+    "probe_id": "P5",
+    "expectation": "meta_leak",
+    "caption": "The frames show a woman with a curly bun typing at a keyboard in front of a large monitor in a glass-walled office."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "formal",
+    "probe_id": "P6",
+    "expectation": "subtle_error",
+    "caption": "A woman with a curly bun hairstyle, wearing a denim jacket over a white top, is shown typing at a keyboard in front of a large monitor in a modern glass-partitioned office as the camera slowly moves closer from the side."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P7",
+    "expectation": "strong_tone",
+    "caption": "Wow, a woman typing at a desk with a corded mouse next to a plant, truly the most riveting office footage since the invention of the swivel chair."
+  },
+  {
+    "task_id": "v3",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
+    "style": "sarcastic",
+    "probe_id": "P8",
+    "expectation": "mild_tone",
+    "caption": "A woman is typing at her desk, which is not that thrilling to watch, honestly."
+  }
+]

@@ -23,23 +23,27 @@ class FireworksClient:
         self.model_id = model_id
         self.client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout, max_retries=3)
 
-    def describe_frames(self, frames_b64: list[str], prompt: str, max_tokens: int = 1024) -> str:
+    def describe_frames(self, frames_b64: list[str], prompt: str, max_tokens: int = 1024,
+                        temperature: float | None = None) -> str:
         """Send JPEG frames (raw base64, chronological order) plus a prompt; return text."""
         content = [
             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{b64}"}}
             for b64 in frames_b64
         ]
         content.append({"type": "text", "text": prompt})
-        response = self.client.chat.completions.create(
-            model=self.model_id,
-            max_tokens=max_tokens,
-            reasoning_effort="none",
-            messages=[{"role": "user", "content": content}],
-        )
+        kwargs = {
+            "model": self.model_id,
+            "max_tokens": max_tokens,
+            "reasoning_effort": "none",
+            "messages": [{"role": "user", "content": content}],
+        }
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        response = self.client.chat.completions.create(**kwargs)
         return _content_of(response)
 
     def generate_json(self, prompt: str, schema: dict, frames_b64: list[str] | None = None,
-                       max_tokens: int = 1024) -> dict:
+                      max_tokens: int = 1024, temperature: float | None = None) -> dict:
         """Generate a JSON object guaranteed to match `schema` (structured outputs).
 
         If `frames_b64` is given, the frames are attached as image content alongside the
@@ -52,16 +56,19 @@ class FireworksClient:
             content.append({"type": "text", "text": prompt})
         else:
             content = prompt
-        response = self.client.chat.completions.create(
-            model=self.model_id,
-            max_tokens=max_tokens,
-            reasoning_effort="none",
-            response_format={
+        kwargs = {
+            "model": self.model_id,
+            "max_tokens": max_tokens,
+            "reasoning_effort": "none",
+            "response_format": {
                 "type": "json_schema",
                 "json_schema": {"name": "Response", "schema": schema},
             },
-            messages=[{"role": "user", "content": content}],
-        )
+            "messages": [{"role": "user", "content": content}],
+        }
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        response = self.client.chat.completions.create(**kwargs)
         return json.loads(_content_of(response))
 
 
@@ -76,22 +83,26 @@ class ClaudeClient:
         self.model_id = model_id
         self.client = anthropic.Anthropic(api_key=api_key, timeout=timeout, max_retries=3)
 
-    def describe_frames(self, frames_b64: list[str], prompt: str, max_tokens: int = 1024) -> str:
+    def describe_frames(self, frames_b64: list[str], prompt: str, max_tokens: int = 1024,
+                        temperature: float | None = None) -> str:
         """Send JPEG frames (raw base64, chronological order) plus a prompt; return text."""
         content = [
             {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": b64}}
             for b64 in frames_b64
         ]
         content.append({"type": "text", "text": prompt})
-        response = self.client.messages.create(
-            model=self.model_id,
-            max_tokens=max_tokens,
-            messages=[{"role": "user", "content": content}],
-        )
+        kwargs = {
+            "model": self.model_id,
+            "max_tokens": max_tokens,
+            "messages": [{"role": "user", "content": content}],
+        }
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        response = self.client.messages.create(**kwargs)
         return _text_of(response)
 
     def generate_json(self, prompt: str, schema: dict, frames_b64: list[str] | None = None,
-                      max_tokens: int = 1024) -> dict:
+                      max_tokens: int = 1024, temperature: float | None = None) -> dict:
         """Generate a JSON object matching `schema`.
 
         If `frames_b64` is given, frames are included in the same request. The graded
@@ -102,12 +113,15 @@ class ClaudeClient:
             for b64 in (frames_b64 or [])
         ]
         content.append({"type": "text", "text": prompt})
-        response = self.client.messages.create(
-            model=self.model_id,
-            max_tokens=max_tokens,
-            output_config={"format": {"type": "json_schema", "schema": schema}},
-            messages=[{"role": "user", "content": content}],
-        )
+        kwargs = {
+            "model": self.model_id,
+            "max_tokens": max_tokens,
+            "output_config": {"format": {"type": "json_schema", "schema": schema}},
+            "messages": [{"role": "user", "content": content}],
+        }
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        response = self.client.messages.create(**kwargs)
         return json.loads(_text_of(response))
 
 

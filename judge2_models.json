@@ -1,0 +1,19 @@
+{
+  "judges": [
+    {
+      "name": "qwen",
+      "provider": "fireworks",
+      "model": "accounts/fireworks/models/qwen3p7-plus"
+    },
+    {
+      "name": "minimax",
+      "provider": "fireworks",
+      "model": "accounts/fireworks/models/minimax-m3"
+    },
+    {
+      "name": "haiku",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5"
+    }
+  ]
+}
