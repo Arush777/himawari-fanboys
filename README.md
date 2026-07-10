@@ -1,3 +1,33 @@
+# 🚨 CRITICAL — DO NOT DELETE — IMPORTANT HANDOFF NOTE 🚨
+
+> **@Arush777 — READ THIS FIRST when you're back (written 2026-07-11). DO NOT DELETE
+> this section or the `submission/` folder or the backup branch until the hackathon
+> results are final.**
+>
+> 1. **`main` was reverted to the 0.87 pipeline.** Your portfolio runtime (`811a3f0`)
+>    scored **0.86** on the hidden leaderboard, so the graded runtime (`main.py`,
+>    `Dockerfile`, `requirements.txt`) was restored to the 0.87 state in `54bcc43`.
+>    **NOTHING IS LOST**: your full 0.86 state is preserved on branch
+>    **`backup/portfolio-runtime-0.86`**. judge2, probes, and your `exp_*` modules are
+>    still on `main` (they're just no longer the graded entry point).
+> 2. **IMPORTANT: the submission Docker image currently lives in a DIFFERENT repo's
+>    namespace**, because GHCR does not let a repo collaborator create packages under
+>    your account. The graded image is
+>    **`ghcr.io/novicecoderinfinity/silver-octo-guacamole:latest`** (public, digest
+>    `94109ac…`), built from this repo at `54bcc43` and verified harness-style (fresh
+>    anonymous pull, no env vars, all captions non-empty, ~1.5 min). The latest
+>    submission call used **this repo + that image URL**. To bring the image home to
+>    your namespace, rebuild from `main` per "Push for submission" below and push to
+>    `ghcr.io/arush777/video-captioner:latest`, then update the submission.
+> 3. **The submission-form files are in [`submission/`](submission/)** — ready to
+>    copy-paste: `SUBMISSION.md` has the short (≤255 chars) and long descriptions, and
+>    `presentation.pptx` is the 6-slide deck. Both describe the 0.87 pipeline that is
+>    actually being graded.
+> 4. Improvement work is duel-tested and waiting (facts grounding, critique/repair with
+>    verify-before-accept, tech-word guard): currently a **11–11–26 tie** vs this 0.87
+>    code under judge2 on 12 clips — ships only if it clears the 0.55 gate on a bigger
+>    task set.
+
 # Himawari — Style-Aware Video Captioning
 
 Himawari is a video-captioning agent built for AMD Developer Hackathon Track 2. It
