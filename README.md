@@ -24,9 +24,11 @@
 >    `presentation.pptx` is the 6-slide deck. Both describe the 0.87 pipeline that is
 >    actually being graded.
 > 4. Improvement work is duel-tested and waiting (facts grounding, critique/repair with
->    verify-before-accept, tech-word guard): currently a **11–11–26 tie** vs this 0.87
->    code under judge2 on 12 clips — ships only if it clears the 0.55 gate on a bigger
->    task set.
+>    verify-before-accept, tech-word guard) on branch **`candidate/facts-critique-v2`**:
+>    currently a **11–11–26 tie** vs this 0.87 code under judge2 on 12 clips — ships
+>    only if it clears the 0.55 gate on a bigger task set.
+> 5. **Full handoff — everything tried, all results, gotchas, and the recommended plan
+>    to beat 0.87 — is in [`HANDOFF.md`](HANDOFF.md). START THERE.**
 
 # Himawari — Style-Aware Video Captioning
 
