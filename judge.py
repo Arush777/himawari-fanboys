@@ -24,7 +24,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import config
 from llm_client import ClaudeJudgeClient, FireworksClient
-from pipeline import STYLE_GUIDE
+from pipeline import build_critique_prompt, build_critique_schema
 from video_utils import (
     choose_num_frames,
     download_video,
@@ -37,51 +37,6 @@ INPUT_PATH = os.environ.get("INPUT_PATH", "/input/tasks.json")
 RESULTS_PATH = os.environ.get("RESULTS_PATH", "/output/results.json")
 JUDGE_OUTPUT_PATH = os.environ.get("JUDGE_OUTPUT_PATH", "/output/judged_results.json")
 MAX_WORKERS = int(os.environ.get("MAX_WORKERS", "4"))
-
-JUDGE_PROMPT = (
-    "You are shown {n} frames sampled evenly, in chronological order, from a video clip. "
-    "You are grading captions written for this clip by another AI. For EACH style below, "
-    "score the caption on two 1-5 integer scales:\n\n"
-    "- accuracy: 1 = describes something not in the video at all, 5 = clearly and "
-    "specifically reflects the real subject, setting, and action visible in the frames.\n"
-    "- tone_fit: 1 = does not match the requested tone at all, 5 = strongly and "
-    "unmistakably matches the requested tone.\n\n"
-    "An empty caption always scores 1 on both. For `notes`, cite specific visual details "
-    "from THIS clip's frames that support or undercut the score — do not restate the style "
-    "definition.\n\n"
-    "Captions to grade:\n{captions_block}\n\n"
-    "Style definitions:\n{style_block}\n\n"
-    "Respond with only a single JSON object matching the requested schema, no other text."
-)
-
-
-def _judge_schema(styles: list[str]) -> dict:
-    # No minimum/maximum on the integers: Fireworks' json_schema mode doesn't fully
-    # support them either way, and Anthropic's structured outputs rejects them
-    # outright ("For 'integer' type, properties maximum, minimum are not supported").
-    # The 1-5 range is enforced by the prompt wording instead.
-    per_style = {
-        "type": "object",
-        "properties": {
-            "accuracy": {"type": "integer"},
-            "tone_fit": {"type": "integer"},
-            "notes": {"type": "string"},
-        },
-        "required": ["accuracy", "tone_fit", "notes"],
-        "additionalProperties": False,
-    }
-    return {
-        "type": "object",
-        "properties": {s: per_style for s in styles},
-        "required": list(styles),
-        "additionalProperties": False,
-    }
-
-
-def _judge_prompt(captions: dict, styles: list[str], num_frames: int) -> str:
-    captions_block = "\n".join(f'- "{s}": {captions.get(s, "") or "(empty)"}' for s in styles)
-    style_block = "\n".join(f'- "{s}": {STYLE_GUIDE[s]}' for s in styles)
-    return JUDGE_PROMPT.format(n=num_frames, captions_block=captions_block, style_block=style_block)
 
 
 def judge_task(video_url: str, captions: dict, styles: list[str], client: FireworksClient) -> dict:
@@ -102,8 +57,8 @@ def judge_task(video_url: str, captions: dict, styles: list[str], client: Firewo
         )
         frames_b64 = [frame_to_b64(p) for p in frame_paths]
 
-        prompt = _judge_prompt(captions, styles, len(frames_b64))
-        return client.generate_json(prompt, _judge_schema(styles), frames_b64=frames_b64, max_tokens=3072)
+        prompt = build_critique_prompt(captions, styles, len(frames_b64))
+        return client.generate_json(prompt, build_critique_schema(styles), frames_b64=frames_b64, max_tokens=3072)
 
 
 def main() -> int:

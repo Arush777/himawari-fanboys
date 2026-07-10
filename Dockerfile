@@ -14,4 +14,10 @@ COPY config.py video_utils.py llm_client.py pipeline.py main.py ./
 ARG ANTHROPIC_API_KEY=""
 ENV ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
 
+# Safety valve for the post-selection critique/repair pass (see config.py). Since the
+# harness injects no env vars at `docker run` time, this is the only way to disable it for
+# a graded run if needed: `--build-arg ENABLE_CRITIQUE_REPAIR=false` at build time.
+ARG ENABLE_CRITIQUE_REPAIR="true"
+ENV ENABLE_CRITIQUE_REPAIR=${ENABLE_CRITIQUE_REPAIR}
+
 CMD ["python", "main.py"]

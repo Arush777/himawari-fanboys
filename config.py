@@ -42,3 +42,17 @@ SECONDS_PER_FRAME = 5.0
 MIN_FRAMES = 8
 MAX_FRAMES = 20
 FRAME_MAX_WIDTH = 768
+
+# Post-selection critique+repair: after the specialist+selection stage picks a winner per
+# style, critique each winner against the source frames (shares judge.py's accuracy/tone_fit
+# rubric via pipeline.build_critique_prompt/build_critique_schema) and rewrite, once, any
+# style scoring below CRITIQUE_THRESHOLD on either axis. Adds up to 2 extra Claude calls per
+# clip. Falls back to the pre-critique captions on any failure — see pipeline.caption_video.
+# Track 2 injects no env vars at `docker run` time, so this default governs the graded run;
+# override at image build time via `--build-arg ENABLE_CRITIQUE_REPAIR=false` (see Dockerfile).
+ENABLE_CRITIQUE_REPAIR = os.environ.get("ENABLE_CRITIQUE_REPAIR", "true").strip().lower() not in ("false", "0", "no", "")
+CRITIQUE_THRESHOLD = int(os.environ.get("CRITIQUE_THRESHOLD", "4"))
+
+# Gemini API key: used only by the standalone, capped video-native description probe
+# (not wired into main.py or the graded pipeline). Borrowed credit — keep usage minimal.
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
