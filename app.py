@@ -17,7 +17,7 @@ except Exception:
 
 import config
 from llm_client import ClaudeClient
-from pipeline import STYLE_GUIDE, captions_from_description, describe_video
+from pipeline import STYLE_GUIDE, caption_video
 
 EXAMPLE_CLIPS = {
     "Urban autumn boulevard (city traffic)": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
@@ -90,12 +90,8 @@ if st.button("Generate captions", type="primary", disabled=not (video_url and st
         st.stop()
     client = get_client(api_key)
     try:
-        with st.spinner("Watching the video (downloading + sampling frames + vision model)..."):
-            description = describe_video(video_url, client)
-        with st.expander("What the agent saw (factual description)"):
-            st.write(description)
-        with st.spinner("Writing styled captions..."):
-            captions = captions_from_description(description, styles, client)
+        with st.spinner("Watching the video and writing visually grounded captions..."):
+            captions = caption_video(video_url, styles, client)
     except Exception as e:
         st.error(f"Captioning failed: {e}")
     else:
