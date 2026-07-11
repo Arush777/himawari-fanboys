@@ -17,6 +17,7 @@ import os
 import sys
 import tempfile
 import traceback
+from concurrent.futures import ThreadPoolExecutor
 from typing import Protocol
 
 import config
@@ -251,17 +252,25 @@ def caption_video(video_url: str, styles: list[str], client: CaptionClient) -> d
     frames_b64 = _extract_frames_b64(video_url)
     description = client.describe_frames(frames_b64, DESCRIBE_PROMPT.format(n=len(frames_b64)))
 
+    valid_styles = [s for s in styles if s in STYLE_GUIDE]
+
+    def _run_specialist(s: str):
+        return s, client.generate_json(
+            _specialist_prompt(s, description), CANDIDATE_SCHEMA,
+            frames_b64=frames_b64, max_tokens=800,
+        )
+
     candidates: dict[str, dict] = {}
-    for s in styles:
-        if s not in STYLE_GUIDE:
-            continue  # unknown style: leave to the fallback single-call path
-        try:
-            candidates[s] = client.generate_json(
-                _specialist_prompt(s, description), CANDIDATE_SCHEMA, max_tokens=800,
-            )
-        except Exception:
-            print(f"[pipeline] specialist call failed for style {s}: "
-                  f"{traceback.format_exc()}", file=sys.stderr)
+    if valid_styles:
+        with ThreadPoolExecutor(max_workers=len(valid_styles)) as executor:
+            futures = [executor.submit(_run_specialist, s) for s in valid_styles]
+            for future in futures:
+                try:
+                    style, candidate = future.result()
+                    candidates[style] = candidate
+                except Exception:
+                    print(f"[pipeline] specialist call failed: "
+                          f"{traceback.format_exc()}", file=sys.stderr)
 
     result: dict[str, str] = {}
     if candidates:

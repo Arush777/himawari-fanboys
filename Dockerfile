@@ -13,5 +13,6 @@ COPY config.py video_utils.py llm_client.py pipeline.py main.py ./
 # the image. The key is supplied at build time (--build-arg), never committed to git.
 ARG ANTHROPIC_API_KEY=""
 ENV ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+ENV MAX_WORKERS="6"
 
 CMD ["python", "main.py"]

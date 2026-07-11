@@ -8,7 +8,9 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv()  # loads .env into os.environ if present; no-op if the file doesn't exist
+# A stale shell value must not shadow the explicitly configured local .env key.
+# Submitted images do not contain .env, so their baked environment is unaffected.
+load_dotenv(override=True)
 
 FIREWORKS_API_KEY = os.environ.get("FIREWORKS_API_KEY", "")
 # Fireworks is kept for judge/dev comparisons; the submitted generator uses Claude.
